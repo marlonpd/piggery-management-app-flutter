@@ -1,3 +1,11 @@
 # This is a generated file; do not edit or check into version control.
 file_picker=/Users/marlondizon/.pub-cache/hosted/pub.dev/file_picker-5.2.11/
 flutter_plugin_android_lifecycle=/Users/marlondizon/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.13/
+path_provider_linux=/Users/marlondizon/.pub-cache/hosted/pub.dev/path_provider_linux-2.1.10/
+path_provider_windows=/Users/marlondizon/.pub-cache/hosted/pub.dev/path_provider_windows-2.1.6/
+shared_preferences=/Users/marlondizon/.pub-cache/hosted/pub.dev/shared_preferences-2.1.0/
+shared_preferences_android=/Users/marlondizon/.pub-cache/hosted/pub.dev/shared_preferences_android-2.1.4/
+shared_preferences_foundation=/Users/marlondizon/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.2.1/
+shared_preferences_linux=/Users/marlondizon/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.2.0/
+shared_preferences_web=/Users/marlondizon/.pub-cache/hosted/pub.dev/shared_preferences_web-2.1.0/
+shared_preferences_windows=/Users/marlondizon/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.2.0/

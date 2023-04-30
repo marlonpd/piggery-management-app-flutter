@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pma/providers/user.dart';
+import 'package:pma/screens/auth_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'helpers/global_variables.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -18,8 +21,33 @@ class FarmApp extends StatefulWidget {
 }
 
 class _FarmAppState extends State<FarmApp> {
+
+    @override
+  void initState() {
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return  MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Farmland - Piggery',
+      theme: ThemeData(
+        scaffoldBackgroundColor: GlobalVariables.backgroundColor,
+        colorScheme: const ColorScheme.light(
+          primary: GlobalVariables.secondaryColor,
+        ),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+        ),
+        useMaterial3: true, // can remove this line
+      ),
+      home: AuthScreen(),
+    );
+  
   }
 }
