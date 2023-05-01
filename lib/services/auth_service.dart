@@ -3,6 +3,7 @@ import 'dart:convert';
 //import 'package:pma/widgets/bottom_bar.dart';
 import 'package:pma/helpers/error_handling.dart';
 import 'package:pma/helpers/global_variables.dart';
+import 'package:pma/screens/home_screen.dart';
 import 'package:pma/helpers/utils.dart';
 import 'package:pma/models/user.dart';
 import 'package:pma/providers/user.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 class AuthService {
   // sign up user
@@ -25,20 +27,21 @@ class AuthService {
         name: name,
         password: password,
         email: email,
-        address: '',
-        type: '',
         token: '',
-        cart: [],
       );
 
+
+      log(user.toString());
+
       http.Response res = await http.post(
-        Uri.parse('$uri/api/signup'),
+        Uri.parse('$uri/api/auth/signup'),
         body: user.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
 
+      // ignore: use_build_context_synchronously
       httpErrorHandle(
         response: res,
         context: context,
@@ -62,7 +65,7 @@ class AuthService {
   }) async {
     try {
       http.Response res = await http.post(
-        Uri.parse('$uri/api/signin'),
+        Uri.parse('$uri/api/auth/signin'),
         body: jsonEncode({
           'email': email,
           'password': password,
@@ -71,20 +74,30 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-          await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
-          // Navigator.pushNamedAndRemoveUntil(
-          //   context,
-          //   BottomBar.routeName,
-          //   (route) => false,
-          // );
-        },
-      );
+
+      log('context');
+      if (context.mounted){
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            if (context.mounted) {
+              Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+            }
+            log(res.body);
+            await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+            if (context.mounted) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RaiseScreen.routeName,
+                (route) => false,
+              );
+            }
+    
+          },
+        );
+      }
     } catch (e) {
       showSnackBar(context, e.toString());
     }
@@ -103,7 +116,7 @@ class AuthService {
       }
 
       var tokenRes = await http.post(
-        Uri.parse('$uri/tokenIsValid'),
+        Uri.parse('$uri/auth/tokenIsValid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token!
@@ -121,8 +134,10 @@ class AuthService {
           },
         );
 
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
+        if (context.mounted) {
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUser(userRes.body);  
+        }
       }
     } catch (e) {
       showSnackBar(context, e.toString());

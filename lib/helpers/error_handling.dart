@@ -9,6 +9,8 @@ void httpErrorHandle({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
+  if (!context.mounted) return;
+
   switch (response.statusCode) {
     case 200:
       onSuccess();

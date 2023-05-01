@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pma/providers/raise.dart';
 import 'package:pma/providers/user.dart';
 import 'package:pma/screens/auth_screen.dart';
+import 'package:pma/screens/home_screen.dart';
+import 'package:pma/services/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:pma/router.dart';
 
 import 'helpers/global_variables.dart';
 
@@ -21,33 +25,45 @@ class FarmApp extends StatefulWidget {
 }
 
 class _FarmAppState extends State<FarmApp> {
+  final AuthService authService = AuthService();
 
-    @override
+  @override
   void initState() {
     super.initState();
+    authService.getUserData(context);
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Farmland - Piggery',
-      theme: ThemeData(
-        scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-        colorScheme: const ColorScheme.light(
-          primary: GlobalVariables.secondaryColor,
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Colors.black,
+   
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<Raises>(
+            create: (ctx) => Raises(),
           ),
+        ],
+        child:  MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Farmland - Piggery',
+        theme: ThemeData(
+          scaffoldBackgroundColor: GlobalVariables.backgroundColor,
+          colorScheme: const ColorScheme.light(
+            primary: GlobalVariables.secondaryColor,
+          ),
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+          ),
+          useMaterial3: true, // can remove this line
         ),
-        useMaterial3: true, // can remove this line
-      ),
-      home: AuthScreen(),
-    );
+        onGenerateRoute: (settings) => generateRoute(settings),
+        home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const RaiseScreen() :
+        const AuthScreen(),
+    ));
+    
   
   }
 }

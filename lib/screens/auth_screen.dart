@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:pma/widgets/custom_button.dart';
 import 'package:pma/widgets/custom_textfield.dart';
+import 'package:pma/services/auth_service.dart';
+import 'dart:developer';
 
 import '../helpers/global_variables.dart';
 
@@ -22,7 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
-  //final AuthService authService = AuthService();
+  final AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -34,6 +36,26 @@ class _AuthScreenState extends State<AuthScreen> {
     _passwordController.dispose();
     _nameController.dispose();
   }
+
+  void signUpUser() {
+    log('clicked signup');
+    authService.signUpUser(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
+      name: _nameController.text,
+    );
+  }
+
+  void signInUser() {
+    log('clicked signInUser');
+    authService.signInUser(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +125,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           text: 'Sign Up',
                           onTap: () {
                             if (_signUpFormKey.currentState!.validate()) {
-                             // signUpUser();
+                              signUpUser();
                             }
                           },
                         )
@@ -154,7 +176,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           text: 'Sign In',
                           onTap: () {
                             if (_signInFormKey.currentState!.validate()) {
-                             // signInUser();
+                              signInUser();
                             }
                           },
                         )
