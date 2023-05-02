@@ -2,16 +2,11 @@ import 'dart:convert';
 
 class Raise {
   String id = '';
-  String raiseType = ''; 
-  int headCount = 0; 
-  String name = ''; 
+  String raiseType = '';
+  int headCount = 0;
+  String name = '';
 
-  Raise({
-    required this.id , 
-    required this.raiseType, 
-    required this.headCount, 
-    required this.name
-  }); 
+  Raise({required this.id, required this.raiseType, required this.headCount, required this.name});
 
   Map<String, dynamic> toMap() {
     return {
@@ -40,7 +35,6 @@ class Raise {
     String? name,
     String? raiseType,
     int? headCount,
-
   }) {
     return Raise(
       id: id ?? this.id,

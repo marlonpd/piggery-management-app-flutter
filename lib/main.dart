@@ -10,12 +10,13 @@ import 'package:pma/router.dart';
 import 'helpers/global_variables.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => UserProvider()),
-
-  ], child: const FarmApp(),));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => UserProvider()),
+    ],
+    child: const FarmApp(),
+  ));
 }
-
 
 class FarmApp extends StatefulWidget {
   const FarmApp({super.key});
@@ -33,37 +34,32 @@ class _FarmAppState extends State<FarmApp> {
     authService.getUserData(context);
   }
 
-
   @override
   Widget build(BuildContext context) {
-   
-      return MultiProvider(
+    return MultiProvider(
         providers: [
           ChangeNotifierProvider<Raises>(
             create: (ctx) => Raises(),
           ),
         ],
-        child:  MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Farmland - Piggery',
-        theme: ThemeData(
-          scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-          colorScheme: const ColorScheme.light(
-            primary: GlobalVariables.secondaryColor,
-          ),
-          appBarTheme: const AppBarTheme(
-            elevation: 0,
-            iconTheme: IconThemeData(
-              color: Colors.black,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Farmland - Piggery',
+          theme: ThemeData(
+            scaffoldBackgroundColor: GlobalVariables.backgroundColor,
+            colorScheme: const ColorScheme.light(
+              primary: GlobalVariables.secondaryColor,
             ),
+            appBarTheme: const AppBarTheme(
+              elevation: 0,
+              iconTheme: IconThemeData(
+                color: Colors.black,
+              ),
+            ),
+            useMaterial3: true, // can remove this line
           ),
-          useMaterial3: true, // can remove this line
-        ),
-        onGenerateRoute: (settings) => generateRoute(settings),
-        home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const RaiseScreen() :
-        const AuthScreen(),
-    ));
-    
-  
+          onGenerateRoute: (settings) => generateRoute(settings),
+          home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const RaiseScreen() : const AuthScreen(),
+        ));
   }
 }

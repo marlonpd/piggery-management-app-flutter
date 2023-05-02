@@ -30,7 +30,6 @@ class AuthService {
         token: '',
       );
 
-
       log(user.toString());
 
       http.Response res = await http.post(
@@ -76,7 +75,7 @@ class AuthService {
       );
 
       log('context');
-      if (context.mounted){
+      if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
@@ -94,7 +93,6 @@ class AuthService {
                 (route) => false,
               );
             }
-    
           },
         );
       }
@@ -117,10 +115,7 @@ class AuthService {
 
       var tokenRes = await http.post(
         Uri.parse('$uri/auth/tokenIsValid'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!
-        },
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'x-auth-token': token!},
       );
 
       var response = jsonDecode(tokenRes.body);
@@ -128,15 +123,12 @@ class AuthService {
       if (response == true) {
         http.Response userRes = await http.get(
           Uri.parse('$uri/'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'x-auth-token': token
-          },
+          headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'x-auth-token': token},
         );
 
         if (context.mounted) {
           var userProvider = Provider.of<UserProvider>(context, listen: false);
-          userProvider.setUser(userRes.body);  
+          userProvider.setUser(userRes.body);
         }
       }
     } catch (e) {

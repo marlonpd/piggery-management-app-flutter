@@ -56,7 +56,6 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,18 +68,16 @@ class _AuthScreenState extends State<AuthScreen> {
             children: [
               Center(
                 child: SizedBox.fromSize(
-                    child: FittedBox(
-                        child: Icon(
-                          Icons.monetization_on_sharp,
-                          size: MediaQuery.of(context).size.width * 0.45,
-                        ),
+                  child: FittedBox(
+                    child: Icon(
+                      Icons.monetization_on_sharp,
+                      size: MediaQuery.of(context).size.width * 0.45,
                     ),
+                  ),
                 ),
               ),
               ListTile(
-                tileColor: _auth == Auth.signup
-                    ? GlobalVariables.backgroundColor
-                    : GlobalVariables.greyBackgroundCOlor,
+                tileColor: _auth == Auth.signup ? GlobalVariables.backgroundColor : GlobalVariables.greyBackgroundCOlor,
                 title: const Text(
                   'Create Account',
                   style: TextStyle(
@@ -134,9 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
               ListTile(
-                tileColor: _auth == Auth.signin
-                    ? GlobalVariables.backgroundColor
-                    : GlobalVariables.greyBackgroundCOlor,
+                tileColor: _auth == Auth.signin ? GlobalVariables.backgroundColor : GlobalVariables.greyBackgroundCOlor,
                 title: const Text(
                   'Sign-In.',
                   style: TextStyle(
