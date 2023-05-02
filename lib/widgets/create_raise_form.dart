@@ -58,8 +58,13 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                       controller: _nameController,
                     ),
 
-                        Expanded(
-                          child: DropdownButtonHideUnderline(
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(height: 10,),
+                            const Text('What are yoy going to raise?')
+                            ,DropdownButtonHideUnderline(
                               child: DropdownButton2(
                             hint: Text(
                               'Select Item',
@@ -83,6 +88,7 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                               height: 40,
                             ),
                           )),
+                          ]
                         )
                   
                     ,
