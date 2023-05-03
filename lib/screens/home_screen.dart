@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pma/providers/raise.dart';
 import 'package:provider/provider.dart';
@@ -23,17 +21,6 @@ class _RaiseScreenState extends State<RaiseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: GlobalVariables.greyBackgroundCOlor,
-      // body: SafeArea(
-      //   child: Padding(
-      //     padding: const EdgeInsets.all(8.0),
-      //     child: Column(
-      //       crossAxisAlignment: CrossAxisAlignment.start,
-      //       children: const [
-      //             Text('Welcom home'),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       appBar: AppBar(
         title: const Text('Raised Hog'),
         leading: GestureDetector(
@@ -75,7 +62,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
                       }),
             )),
           ),
-          Center(child: (CreateRaiseForm()))
+          const Center(child: (CreateRaiseForm()))
         ],
       ),
     );
@@ -98,7 +85,9 @@ class _RaiseScreenState extends State<RaiseScreen> {
         children: [
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
-            onPressed: (_) {},
+            onPressed: (_) {
+              Provider.of<Raises>(context, listen: false).deleteRaise(context: context , raise:raise);
+            },
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,

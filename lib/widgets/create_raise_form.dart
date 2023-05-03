@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:pma/models/raise.dart';
+import 'package:pma/providers/raise.dart';
+import 'package:provider/provider.dart';
 
 class CreateRaiseForm extends StatefulWidget {
   const CreateRaiseForm({super.key});
@@ -15,6 +18,7 @@ List<String> raiseTypes = <String>['fattener', 'sow', 'boar', 'weaner'];
 class _CreateRaiseFormState extends State<CreateRaiseForm> {
   final _nameController = TextEditingController();
   final _headCountController = TextEditingController();
+  final _pigPenController = TextEditingController();
 
   bool isCreateRaise = false;
   String _raiseType = '';
@@ -41,30 +45,40 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
     );
   }
 
+  Future<void> _addNewRaise(ctx) async {
+    final Raise raise = Raise(
+        id: '', raiseType: _raiseType, headCount: int.parse(_headCountController.text), name: _nameController.text);
+    Provider.of<Raises>(ctx, listen: false).addNewRaise(context: context, raise: raise);
+  }
+
   void startCreateRaise(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
+        isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
             return GestureDetector(
               onTap: () {},
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding:
+                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    const Text('Add new livestock to raise'),
                     TextField(
                       decoration: const InputDecoration(labelText: 'Name'),
                       controller: _nameController,
                     ),
-
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const SizedBox(height: 10,),
-                            const Text('What are yoy going to raise?')
-                            ,DropdownButtonHideUnderline(
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text('What type are you going to raise?'),
+                          DropdownButtonHideUnderline(
                               child: DropdownButton2(
                             hint: Text(
                               'Select Item',
@@ -88,17 +102,38 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                               height: 40,
                             ),
                           )),
-                          ]
-                        )
-                  
-                    ,
+                        ]),
                     Expanded(
                         child: TextField(
                       decoration: const InputDecoration(labelText: 'Head Count'),
                       controller: _headCountController,
                     )),
-                    ElevatedButton.icon(
-                        onPressed: () {}, icon: const Icon(Icons.add), label: const Text('Create Raise'))
+                    Expanded(
+                        child: TextField(
+                      decoration: const InputDecoration(labelText: 'Pig Pen'),
+                      controller: _pigPenController,
+                    )),
+                    Row(
+                      children: [
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.cancel),
+                            label: const Text('Cancel')),
+                        const Spacer(),
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              //setState(() {
+                              _addNewRaise(context);
+                              Navigator.pop(context);
+
+                              //},);
+                            },
+                            icon: const Icon(Icons.add),
+                            label: const Text('Create Raise'))
+                      ],
+                    )
                   ],
                 ),
               ),
