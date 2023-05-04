@@ -1,11 +1,15 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pma/providers/raise.dart';
+import 'package:pma/screens/hog_detail_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/constants.dart';
 import '../helpers/global_variables.dart';
 import '../models/raise.dart';
 import '../widgets/create_raise_form.dart';
+import '../widgets/update_raise_form.dart';
 
 class RaiseScreen extends StatefulWidget {
   static const String routeName = '/raise';
@@ -17,6 +21,15 @@ class RaiseScreen extends StatefulWidget {
 }
 
 class _RaiseScreenState extends State<RaiseScreen> {
+  final _nameController = TextEditingController();
+  final _headCountController = TextEditingController();
+  final _pigPenController = TextEditingController();
+
+  String _raiseType = '';
+
+  final _dropdownMenuOptions =
+      RAISE_TYPES.map((String item) => DropdownMenuItem<String>(value: item, child: Text(item))).toList();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +99,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
             onPressed: (_) {
-              Provider.of<Raises>(context, listen: false).deleteRaise(context: context , raise:raise);
+              Provider.of<Raises>(context, listen: false).deleteRaise(context: context, raise: raise);
             },
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -110,11 +123,13 @@ class _RaiseScreenState extends State<RaiseScreen> {
           SlidableAction(
             // An action can be bigger than the others.
             flex: 2,
-            onPressed: (_) {},
+            onPressed: (_) {
+              _startEditRaise(context, raise);
+            },
             backgroundColor: const Color(0xFF7BC043),
             foregroundColor: Colors.white,
-            icon: Icons.archive,
-            label: 'Archive',
+            icon: Icons.edit,
+            label: 'Edit',
           ),
           SlidableAction(
             onPressed: (_) {},
@@ -128,7 +143,33 @@ class _RaiseScreenState extends State<RaiseScreen> {
 
       // The child of the Slidable is what the user sees when the
       // component is not dragged.
-      child: ListTile(title: Text('${raise.name} - head count:  ${raise.headCount}')),
+      child: GestureDetector(
+            child: ListTile(
+              title: Text(
+                raise.name,
+              ),
+              subtitle: Text('Raise type: ${raise.raiseType}'),
+              trailing: Text(
+                raise.headCount.toString(),
+              ),
+            ),
+            onDoubleTap: () {
+              setState(() {
+                // indexToEdit = index;
+                // _editNameController.text = budget.name;
+              });
+              //startEditBudget(context, budget);
+            },
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(
+                HogDetailScreen.routeName,
+                arguments: raise.id,
+              )
+                  .then((_) {
+                setState(() {});
+              });
+            }),
     );
   }
 
@@ -142,6 +183,109 @@ class _RaiseScreenState extends State<RaiseScreen> {
                 padding: EdgeInsets.all(20.0),
                 child: CreateRaiseForm(),
               ));
+        });
+  }
+
+  Future<void> _updateRaise(ctx, Raise raise) async {
+    Provider.of<Raises>(ctx, listen: false).updateRaise(context: context, raise: raise);
+  }
+
+  void _startEditRaise(BuildContext ctx, Raise raise) {
+    _nameController.text = raise.name;
+    _headCountController.text = raise.headCount.toString();
+    _pigPenController.text = raise.hogPen;
+    _raiseType = raise.raiseType;
+
+    showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        builder: (_) {
+          return StatefulBuilder(builder: (context, setState) {
+            return GestureDetector(
+              onTap: () {},
+              child: Padding(
+                padding:
+                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const Text('Update livestock to raise'),
+                    TextField(
+                      decoration: const InputDecoration(labelText: 'Name'),
+                      controller: _nameController,
+                    ),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text('What type are you going to raise?'),
+                          DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                            hint: Text(
+                              'Select Item',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: _dropdownMenuOptions,
+                            value: _raiseType,
+                            onChanged: (value) {
+                              setState(() {
+                                _raiseType = value as String;
+                              });
+                            },
+                            buttonStyleData: const ButtonStyleData(
+                              height: 40,
+                              width: 140,
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              height: 40,
+                            ),
+                          )),
+                        ]),
+                    Expanded(
+                        child: TextField(
+                      decoration: const InputDecoration(labelText: 'Head Count'),
+                      controller: _headCountController,
+                    )),
+                    Expanded(
+                        child: TextField(
+                      decoration: const InputDecoration(labelText: 'Pig Pen'),
+                      controller: _pigPenController,
+                    )),
+                    Row(
+                      children: [
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.cancel),
+                            label: const Text('Cancel')),
+                        const Spacer(),
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              final Raise updateRaise = Raise(
+                                  id: raise.id,
+                                  raiseType: _raiseType,
+                                  headCount: int.parse(_headCountController.text),
+                                  name: _nameController.text,
+                                  hogPen: _pigPenController.text);
+                              _updateRaise(ctx, updateRaise);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.add),
+                            label: const Text('Update Raise'))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
         });
   }
 }

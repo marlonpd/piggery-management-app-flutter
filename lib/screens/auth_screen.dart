@@ -38,7 +38,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void signUpUser() {
-    log('clicked signup');
     authService.signUpUser(
       context: context,
       email: _emailController.text,
@@ -48,7 +47,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void signInUser() {
-    log('clicked signInUser');
     authService.signInUser(
       context: context,
       email: _emailController.text,

@@ -5,9 +5,9 @@ class Raise {
   String raiseType = '';
   int headCount = 0;
   String name = '';
-  String pigPen = '';
+  String hogPen = '';
 
-  Raise({required this.id, required this.raiseType, required this.headCount, required this.name});
+  Raise({required this.id, required this.raiseType, required this.headCount, required this.name, required this.hogPen});
 
   Map<String, dynamic> toMap() {
     return {
@@ -15,7 +15,7 @@ class Raise {
       'name': name,
       'raise_type': raiseType,
       'head_count': headCount,
-      'pig_pen': pigPen,
+      'hog_pen': hogPen,
     };
   }
 
@@ -25,7 +25,7 @@ class Raise {
       name: map['name'] ?? '',
       raiseType: map['raise_type'] ?? '',
       headCount: map['head_count'] ?? 0,
-      //  pigPen: map['pig_pen'] ?? '',
+      hogPen: map['hog_pen'] ?? '',
     );
   }
 
@@ -38,12 +38,14 @@ class Raise {
     String? name,
     String? raiseType,
     int? headCount,
+    String? hogPen,
   }) {
     return Raise(
       id: id ?? this.id,
       name: name ?? this.name,
       raiseType: raiseType ?? this.raiseType,
       headCount: headCount ?? this.headCount,
+      hogPen: hogPen ?? this.hogPen,
     );
   }
 }

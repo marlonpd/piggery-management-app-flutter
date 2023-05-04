@@ -46,6 +46,7 @@ class _FarmAppState extends State<FarmApp> {
           debugShowCheckedModeBanner: false,
           title: 'Farmland - Piggery',
           theme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder(),}),
             scaffoldBackgroundColor: GlobalVariables.backgroundColor,
             colorScheme: const ColorScheme.light(
               primary: GlobalVariables.secondaryColor,

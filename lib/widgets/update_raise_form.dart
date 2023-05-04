@@ -6,20 +6,21 @@ import 'package:pma/models/raise.dart';
 import 'package:pma/providers/raise.dart';
 import 'package:provider/provider.dart';
 
-class CreateRaiseForm extends StatefulWidget {
-  const CreateRaiseForm({super.key});
+class UpdateRaiseForm extends StatefulWidget {
+  const UpdateRaiseForm({super.key});
 
   @override
-  State<CreateRaiseForm> createState() => _CreateRaiseFormState();
+  State<UpdateRaiseForm> createState() => _UpdateRaiseFormState();
 }
 
 List<String> raiseTypes = <String>['fattener', 'sow', 'boar', 'weaner'];
 
-class _CreateRaiseFormState extends State<CreateRaiseForm> {
+class _UpdateRaiseFormState extends State<UpdateRaiseForm> {
   final _nameController = TextEditingController();
   final _headCountController = TextEditingController();
   final _pigPenController = TextEditingController();
 
+  bool isCreateRaise = false;
   String _raiseType = '';
 
   final _dropdownMenuOptions =
@@ -42,16 +43,6 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
             child: const Text('Add new'))
       ],
     );
-  }
-
-  Future<void> _addNewRaise(ctx) async {
-    final Raise raise = Raise(
-        id: '',
-        raiseType: _raiseType,
-        headCount: int.parse(_headCountController.text),
-        name: _nameController.text,
-        hogPen: _pigPenController.text);
-    Provider.of<Raises>(ctx, listen: false).addNewRaise(context: context, raise: raise);
   }
 
   void startCreateRaise(BuildContext ctx) {
@@ -128,7 +119,7 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                         ElevatedButton.icon(
                             onPressed: () {
                               //setState(() {
-                              _addNewRaise(context);
+                              //_addNewRaise(context);
                               Navigator.pop(context);
 
                               //},);

@@ -106,19 +106,28 @@ class Raises with ChangeNotifier {
 
     try {
       http.Response res = await http.post(
-        Uri.parse('$uri/api/update'),
+        Uri.parse('$uri/api/raise/update'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ${userProvider.user.token}',
         },
-        body: jsonEncode(raise),
+        body: raise.toJson(),
       );
 
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () {},
+          onSuccess: () {
+            final ndx = _items.indexWhere((item) => item.id == raise.id);
+
+            if (ndx >= 0) {
+              _items[ndx].name = raise.name;
+              _items[ndx].headCount = raise.headCount;
+              _items[ndx].raiseType = raise.raiseType;
+              _items[ndx].hogPen = raise.hogPen;
+            }
+          },
         );
       }
     } catch (e) {
@@ -153,9 +162,7 @@ class Raises with ChangeNotifier {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () {
-
-          },
+          onSuccess: () {},
         );
       }
     } catch (e) {
