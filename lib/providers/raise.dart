@@ -76,19 +76,21 @@ class Raises with ChangeNotifier {
         body: raise.toJson(),
       );
 
+      _items.add(
+        Raise.fromJson(
+          jsonEncode(
+            jsonDecode(res.body),
+          ),
+        ),
+      );
+
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
             log('Succcess');
-            _items.add(
-              Raise.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body),
-                ),
-              ),
-            );
+         
           },
         );
       }

@@ -68,6 +68,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
                           return child as Widget;
                         }
                         return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: raises.items.length,
                           itemBuilder: (ctx, i) => _raiseItem(ctx, i, raises.items[i]),
