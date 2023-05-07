@@ -49,6 +49,15 @@ class Raises with ChangeNotifier {
         );
       } else {
         log('Raise not properly loaded.');
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          _items.add(
+            Raise.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i],
+              ),
+            ),
+          );
+        }
       }
     } catch (e) {
       showSnackBar(context, e.toString());

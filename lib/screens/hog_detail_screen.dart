@@ -71,7 +71,7 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
             DetailScreen(raise: raise),
             NotesScreen(raise: raise),
             EventsScreen(raise: raise),
-            AccountingScreen(),
+            AccountingScreen(raise: raise),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pma/providers/accounting.dart';
 import 'package:pma/providers/event.dart';
 import 'package:pma/providers/note.dart';
 import 'package:pma/providers/raise.dart';
@@ -48,6 +49,9 @@ class _FarmAppState extends State<FarmApp> {
           ),
           ChangeNotifierProvider<Events>(
             create: (ctx) => Events(),
+          ),
+          ChangeNotifierProvider<Accountings>(
+            create: (ctx) => Accountings(),
           ),
         ],
         child: MaterialApp(

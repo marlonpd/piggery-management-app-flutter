@@ -19,7 +19,6 @@ class CreateEventForm extends StatefulWidget {
 
 class _CreateEventFormState extends State<CreateEventForm> {
   final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +78,10 @@ class _CreateEventFormState extends State<CreateEventForm> {
                             labelText: 'Event Date',
                           ),
                           mode: DateTimeFieldPickerMode.date,
-                           autovalidateMode: AutovalidateMode.always,
-                           validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+                          autovalidateMode: AutovalidateMode.always,
+                          validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
                           //selectedDate: selectedDate,
                           onDateSelected: (DateTime value) {
-                            
                             selectedDate = value;
                             print(value.toIso8601String());
                           },

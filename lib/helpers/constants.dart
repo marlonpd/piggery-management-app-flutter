@@ -6,3 +6,5 @@ class EType {
 }
 
 List<String> RAISE_TYPES = <String>['fattener', 'sow', 'boar', 'weaner'];
+
+List<String> ENTRY_TYPE = <String>['income', 'expenses'];

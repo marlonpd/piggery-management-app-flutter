@@ -22,9 +22,9 @@ class Accounting {
     return {
       'id': id,
       'raise_id': raiseId,
-      'title': description,
+      'description': description,
       'entry_type': entryType,
-      'amount': amount,
+      'amount': amount.toString(),
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
