@@ -9,7 +9,6 @@ import '../helpers/constants.dart';
 import '../helpers/global_variables.dart';
 import '../models/raise.dart';
 import '../widgets/create_raise_form.dart';
-import '../widgets/update_raise_form.dart';
 
 class RaiseScreen extends StatefulWidget {
   static const String routeName = '/raise';
@@ -54,27 +53,32 @@ class _RaiseScreenState extends State<RaiseScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            child: SingleChildScrollView(
-                child: FutureBuilder(
-              future: Provider.of<Raises>(context, listen: false).fetchRaises(context),
-              builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Consumer<Raises>(
-                      child: const Center(child: Text('No raised hog added')),
-                      builder: (ctxx, raises, child) {
-                        if (raises.items.isEmpty) {
-                          return child as Widget;
-                        }
-                        return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: raises.items.length,
-                          itemBuilder: (ctx, i) => _raiseItem(ctx, i, raises.items[i]),
-                        );
-                      }),
-            )),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await Provider.of<Raises>(context, listen: false).fetchRaises(context);
+              },
+              child: SingleChildScrollView(
+                  child: FutureBuilder(
+                future: Provider.of<Raises>(context, listen: false).fetchRaises(context),
+                builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Consumer<Raises>(
+                        child: const Center(child: Text('No raised hog added')),
+                        builder: (ctxx, raises, child) {
+                          if (raises.items.isEmpty) {
+                            return child as Widget;
+                          }
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: raises.items.length,
+                            itemBuilder: (ctx, i) => _raiseItem(ctx, i, raises.items[i]),
+                          );
+                        }),
+              )),
+            ),
           ),
           const Center(child: (CreateRaiseForm()))
         ],
@@ -145,32 +149,32 @@ class _RaiseScreenState extends State<RaiseScreen> {
       // The child of the Slidable is what the user sees when the
       // component is not dragged.
       child: GestureDetector(
-            child: ListTile(
-              title: Text(
-                raise.name,
-              ),
-              subtitle: Text('Raise type: ${raise.raiseType}'),
-              trailing: Text(
-                raise.headCount.toString(),
-              ),
+          child: ListTile(
+            title: Text(
+              raise.name,
             ),
-            onDoubleTap: () {
-              setState(() {
-                // indexToEdit = index;
-                // _editNameController.text = budget.name;
-              });
-              //startEditBudget(context, budget);
-            },
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(
-                HogDetailScreen.routeName,
-                arguments: raise.id,
-              )
-                  .then((_) {
-                setState(() {});
-              });
-            }),
+            subtitle: Text('Raise type: ${raise.raiseType}'),
+            trailing: Text(
+              raise.headCount.toString(),
+            ),
+          ),
+          onDoubleTap: () {
+            setState(() {
+              // indexToEdit = index;
+              // _editNameController.text = budget.name;
+            });
+            //startEditBudget(context, budget);
+          },
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(
+              HogDetailScreen.routeName,
+              arguments: raise,
+            )
+                .then((_) {
+              setState(() {});
+            });
+          }),
     );
   }
 

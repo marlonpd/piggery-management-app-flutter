@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -27,4 +28,12 @@ Future<List<File>> pickImages() async {
     debugPrint(e.toString());
   }
   return images;
+}
+
+String toFormattedDate(String dt) {
+  DateTime tempDate = DateFormat("yyyy-MM-dd").parse(dt);
+
+  String formattedDate = DateFormat.yMMMd().format(tempDate);
+
+  return formattedDate;
 }

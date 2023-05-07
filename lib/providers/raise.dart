@@ -29,9 +29,6 @@ class Raises with ChangeNotifier {
           'Authorization': 'Bearer ${userProvider.user.token}',
         },
       );
-
-      log(res.body.toString());
-
       _items.clear();
 
       if (context.mounted) {
@@ -84,13 +81,14 @@ class Raises with ChangeNotifier {
         ),
       );
 
+      notifyListeners();
+
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
             log('Succcess');
-         
           },
         );
       }
@@ -107,6 +105,16 @@ class Raises with ChangeNotifier {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
+      final ndx = _items.indexWhere((item) => item.id == raise.id);
+
+      if (ndx >= 0) {
+        _items[ndx].name = raise.name;
+        _items[ndx].headCount = raise.headCount;
+        _items[ndx].raiseType = raise.raiseType;
+        _items[ndx].hogPen = raise.hogPen;
+        notifyListeners();
+      }
+
       http.Response res = await http.post(
         Uri.parse('$uri/api/raise/update'),
         headers: {
@@ -120,16 +128,7 @@ class Raises with ChangeNotifier {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () {
-            final ndx = _items.indexWhere((item) => item.id == raise.id);
-
-            if (ndx >= 0) {
-              _items[ndx].name = raise.name;
-              _items[ndx].headCount = raise.headCount;
-              _items[ndx].raiseType = raise.raiseType;
-              _items[ndx].hogPen = raise.hogPen;
-            }
-          },
+          onSuccess: () {},
         );
       }
     } catch (e) {
@@ -145,6 +144,9 @@ class Raises with ChangeNotifier {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     log(raise.toJson());
     try {
+      _items.removeWhere((item) => item.id == raise.id);
+      notifyListeners();
+
       http.Response res = await http.post(
         Uri.parse('$uri/api/raise/delete'),
         headers: {
@@ -157,8 +159,6 @@ class Raises with ChangeNotifier {
       log(res.body.toString());
 
       log(_items.toList().toString());
-
-      _items.removeWhere((item) => item.id == raise.id);
 
       if (context.mounted) {
         httpErrorHandle(

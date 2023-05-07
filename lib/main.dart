@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pma/providers/note.dart';
 import 'package:pma/providers/raise.dart';
 import 'package:pma/providers/user.dart';
 import 'package:pma/screens/auth_screen.dart';
@@ -41,12 +42,17 @@ class _FarmAppState extends State<FarmApp> {
           ChangeNotifierProvider<Raises>(
             create: (ctx) => Raises(),
           ),
+          ChangeNotifierProvider<Notes>(
+            create: (ctx) => Notes(),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Farmland - Piggery',
           theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder(),}),
+            pageTransitionsTheme: const PageTransitionsTheme(builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            }),
             scaffoldBackgroundColor: GlobalVariables.backgroundColor,
             colorScheme: const ColorScheme.light(
               primary: GlobalVariables.secondaryColor,
