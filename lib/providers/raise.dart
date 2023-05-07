@@ -47,6 +47,8 @@ class Raises with ChangeNotifier {
             }
           },
         );
+      } else {
+        log('Raise not properly loaded.');
       }
     } catch (e) {
       showSnackBar(context, e.toString());

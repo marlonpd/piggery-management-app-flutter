@@ -70,7 +70,7 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
           children: [
             DetailScreen(raise: raise),
             NotesScreen(raise: raise),
-            EventsScreen(),
+            EventsScreen(raise: raise),
             AccountingScreen(),
           ],
         ),

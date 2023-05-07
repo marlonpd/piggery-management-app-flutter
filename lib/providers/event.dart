@@ -63,7 +63,7 @@ class Events with ChangeNotifier {
 
     try {
       log(event.toJson());
-      log('$uri/api/note/save');
+      log('$uri/api/event/save');
       log('Bearer ${userProvider.user.token}');
       http.Response res = await http.post(
         Uri.parse('$uri/api/event/save'),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pma/providers/event.dart';
 import 'package:pma/providers/note.dart';
 import 'package:pma/providers/raise.dart';
 import 'package:pma/providers/user.dart';
@@ -44,6 +45,9 @@ class _FarmAppState extends State<FarmApp> {
           ),
           ChangeNotifierProvider<Notes>(
             create: (ctx) => Notes(),
+          ),
+          ChangeNotifierProvider<Events>(
+            create: (ctx) => Events(),
           ),
         ],
         child: MaterialApp(
