@@ -139,7 +139,6 @@ class _AccountingScreenState extends State<AccountingScreen> {
     final amountController = TextEditingController();
     amountController.text = accounting.amount.toString();
 
-
     final dropdownMenuOptions =
         ENTRY_TYPE.map((String item) => DropdownMenuItem<String>(value: item, child: Text(item))).toList();
     String entryType = accounting.entryType;
