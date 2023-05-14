@@ -259,11 +259,62 @@ class UserProvider extends ChangeNotifier {
         },
       );
 
+      var resp = (jsonDecode(res.body)); 
 
-      log('responed!!');
+      bool isSuccess = resp['is_success'];
+      String msg = resp['msg'];
 
-      log(jsonDecode(res.body).toString());
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () async {
+            showSnackBar(context, msg);
+          },
+        );
+      }
 
+      _isLoading = false;
+      notifyListeners();
+
+      return isSuccess;
+    } catch (e) {
+      _isLoading = false;
+      showSnackBar(context, e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updatePassword({
+    required BuildContext context,
+    required String oldPassword,
+    required String password,
+    required String confirmPassword
+  }) async {
+    try {
+      _isLoading = true;
+
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      log(jsonEncode({
+          'old_password': oldPassword, 
+          'password': password, 
+          'password_confirm': confirmPassword
+        }));
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/auth/update-password'),
+        body: jsonEncode({
+          'old_password': oldPassword, 
+          'password': password, 
+          'password_confirm': confirmPassword
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userProvider.user.token}',
+        },
+      );
+      log('await');
+      log(res.body.toString());
 
       var resp = (jsonDecode(res.body)); 
 
@@ -311,6 +362,8 @@ class UserProvider extends ChangeNotifier {
       );
 
       var response = (jsonDecode(tokenRes.body));
+
+      log('getuser');
 
       if (response == true) {
         http.Response userRes = await http.post(

@@ -5,6 +5,7 @@ import 'package:pma/providers/raise.dart';
 import 'package:pma/providers/user.dart';
 import 'package:pma/screens/hog_detail_screen.dart';
 import 'package:pma/screens/signin_screen.dart';
+import 'package:pma/screens/update_password_screen.dart';
 import 'package:pma/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +73,10 @@ class _RaiseScreenState extends State<RaiseScreen> {
             ListTile(
               title: const Text('Change Password'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.of(context)
+                    .pushNamed(
+                      UpdatePasswordScreen.routeName
+                    );
               },
             ),
             ListTile(

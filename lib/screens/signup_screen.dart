@@ -105,7 +105,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               const SizedBox(height: 15.0),
                                CustomBtn(
-                                    text: 'Sign In',
+                                    text: 'Sign up',
                                     onTap: () {
                                       //if (_signInFormKey.currentState!.validate()) {
                                       setState(() {
@@ -137,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text.rich(TextSpan(children: [
                                   const TextSpan(text: "Already have an account? "),
                                   TextSpan(
-                                    text: 'Signin',
+                                    text: 'Sign in',
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         Navigator.push(

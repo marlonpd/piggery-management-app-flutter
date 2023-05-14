@@ -8,9 +8,15 @@ import 'package:pma/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/signup_screen.dart';
+import 'package:pma/screens/update_password_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
+    case UpdatePasswordScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const UpdatePasswordScreen(),
+      );
     case ConfirmSecurityCodeScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
