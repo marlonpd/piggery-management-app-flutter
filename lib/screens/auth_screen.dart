@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:pma/providers/user.dart';
 import 'package:pma/widgets/custom_button.dart';
 import 'package:pma/widgets/custom_textfield.dart';
 import 'package:pma/services/auth_service.dart';
+import 'package:provider/provider.dart';
 import 'dart:developer';
 
 import '../helpers/global_variables.dart';
@@ -14,6 +16,7 @@ enum Auth {
 }
 
 class AuthScreen extends StatefulWidget {
+  static const routeName = '/auth';
   const AuthScreen({super.key});
 
   @override
@@ -24,7 +27,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
-  final AuthService authService = AuthService();
+  //final AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -38,8 +41,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void signUpUser() {
-    authService.signUpUser(
+    Provider.of<UserProvider>(context, listen: false).signUpUser(
       context: context,
+      confirmPassword: _emailController.text,
       email: _emailController.text,
       password: _passwordController.text,
       name: _nameController.text,
@@ -47,7 +51,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void signInUser() {
-    authService.signInUser(
+    Provider.of<UserProvider>(context, listen: false).signInUser(
       context: context,
       email: _emailController.text,
       password: _passwordController.text,
@@ -116,13 +120,16 @@ class _AuthScreenState extends State<AuthScreen> {
                           hintText: 'Password',
                         ),
                         const SizedBox(height: 10),
-                        CustomButton(
+                        CustomBtn(
                           text: 'Sign Up',
                           onTap: () {
                             if (_signUpFormKey.currentState!.validate()) {
-                              signUpUser();
+                              setState(() {
+                                signUpUser();
+                              });
                             }
                           },
+                          isLoading: Provider.of<UserProvider>(context, listen: false).isLoading,
                         )
                       ],
                     ),
@@ -165,13 +172,16 @@ class _AuthScreenState extends State<AuthScreen> {
                           hintText: 'Password',
                         ),
                         const SizedBox(height: 10),
-                        CustomButton(
+                        CustomBtn(
                           text: 'Sign In',
                           onTap: () {
                             if (_signInFormKey.currentState!.validate()) {
-                              signInUser();
+                              setState(() {
+                                signInUser();
+                              });
                             }
                           },
+                          isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
                         )
                       ],
                     ),

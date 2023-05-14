@@ -2,13 +2,17 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pma/providers/raise.dart';
+import 'package:pma/providers/user.dart';
 import 'package:pma/screens/hog_detail_screen.dart';
+import 'package:pma/screens/signin_screen.dart';
+import 'package:pma/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/constants.dart';
 import '../helpers/global_variables.dart';
 import '../models/raise.dart';
 import '../widgets/create_raise_form.dart';
+import 'auth_screen.dart';
 
 class RaiseScreen extends StatefulWidget {
   static const String routeName = '/raise';
@@ -24,6 +28,8 @@ class _RaiseScreenState extends State<RaiseScreen> {
   final _headCountController = TextEditingController();
   final _pigPenController = TextEditingController();
 
+  //final AuthService authService = AuthService();
+
   String _raiseType = '';
 
   final _dropdownMenuOptions =
@@ -35,19 +41,51 @@ class _RaiseScreenState extends State<RaiseScreen> {
       backgroundColor: GlobalVariables.greyBackgroundCOlor,
       appBar: AppBar(
         title: const Text('Raised Hog'),
-        leading: GestureDetector(
-          onTap: () {},
-          child: const Icon(
-            Icons.menu, // add custom icons also
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                startCreateNewRaise(context);
+        // leading: GestureDetector(
+        //   onTap: () {},
+        //   child: const Icon(
+        //     Icons.menu, // add custom icons also
+        //   ),
+        // ),
+        // actions: <Widget>[
+        //   IconButton(
+        //       onPressed: () {
+        //         startCreateNewRaise(context);
+        //       },
+        //       icon: const Icon(Icons.add))
+        // ],
+      ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('About HogMaster'),
+            ),
+            ListTile(
+              title: const Text('Change Password'),
+              onTap: () {
+                Navigator.pop(context);
               },
-              icon: const Icon(Icons.add))
-        ],
+            ),
+            ListTile(
+              title: const Text('Logout'),
+              onTap: () {
+                Provider.of<UserProvider>(context, listen: false).logoutUser(context);
+                Navigator.of(context).pushNamed(
+                  SigninScreen.routeName,
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

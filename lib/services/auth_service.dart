@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 //import 'package:pma/widgets/bottom_bar.dart';
 import 'package:pma/helpers/error_handling.dart';
@@ -13,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer';
 
-class AuthService {
+class AuthService1 {
   // sign up user
   void signUpUser({
     required BuildContext context,
@@ -108,28 +109,48 @@ class AuthService {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
-
+      log('getuserdata');
+      log(token!);
       if (token == null) {
         prefs.setString('x-auth-token', '');
+        return;
       }
 
       var tokenRes = await http.post(
-        Uri.parse('$uri/auth/tokenIsValid'),
+        Uri.parse('$uri/api/auth/tokenIsValid'),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'x-auth-token': token!},
       );
 
-      var response = jsonDecode(tokenRes.body);
+      var response = (jsonDecode(tokenRes.body));
 
       if (response == true) {
-        http.Response userRes = await http.get(
-          Uri.parse('$uri/'),
-          headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'x-auth-token': token},
+        http.Response userRes = await http.post(
+          Uri.parse('$uri/api/auth/me'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+            'x-auth-token': token
+          },
         );
 
         if (context.mounted) {
           var userProvider = Provider.of<UserProvider>(context, listen: false);
           userProvider.setUser(userRes.body);
         }
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void logoutUser(context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('x-auth-token', '');
+
+      if (context.mounted) {
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.clearUser();
       }
     } catch (e) {
       showSnackBar(context, e.toString());

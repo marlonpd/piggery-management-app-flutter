@@ -6,6 +6,7 @@ import 'package:pma/providers/raise.dart';
 import 'package:pma/providers/user.dart';
 import 'package:pma/screens/auth_screen.dart';
 import 'package:pma/screens/home_screen.dart';
+import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:pma/router.dart';
@@ -29,12 +30,13 @@ class FarmApp extends StatefulWidget {
 }
 
 class _FarmAppState extends State<FarmApp> {
-  final AuthService authService = AuthService();
+  //final AuthService authService = AuthService();
+  final _messangerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context);
+    Provider.of<UserProvider>(context, listen: false).getUserData(context);
   }
 
   @override
@@ -55,6 +57,7 @@ class _FarmAppState extends State<FarmApp> {
           ),
         ],
         child: MaterialApp(
+          scaffoldMessengerKey: _messangerKey,
           debugShowCheckedModeBanner: false,
           title: 'Farmland - Piggery',
           theme: ThemeData(
@@ -74,7 +77,7 @@ class _FarmAppState extends State<FarmApp> {
             useMaterial3: true, // can remove this line
           ),
           onGenerateRoute: (settings) => generateRoute(settings),
-          home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const RaiseScreen() : const AuthScreen(),
+          home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const RaiseScreen() : const SigninScreen(),
         ));
   }
 }

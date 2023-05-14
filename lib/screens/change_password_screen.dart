@@ -1,44 +1,59 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/helpers/theme_helper.dart';
 import 'package:pma/providers/user.dart';
-import 'package:pma/screens/forgot_password_screen.dart';
 import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/signup_screen.dart';
 import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
-class SignupScreen extends StatefulWidget {
-  static const String routeName = '/signup';
-  const SignupScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  static const String routeName = '/change-password';
+  const ChangePasswordScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  double _headerHeight = 250;
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final Key _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _passwordConfirmController = TextEditingController();
 
-  void signUpUser() {
-    Provider.of<UserProvider>(context, listen: false).signUpUser(
-      context: context,
-      name: _nameController.text,
-      email: _emailController.text,
-      password: _passwordController.text,
-      confirmPassword: _passwordController.text,
-    );
+  @override
+  void dispose() {
+    super.dispose();
+    _passwordController.dispose();
+    _passwordConfirmController.dispose();
   }
 
+  Future<void> changePassword(email, securityCode) async {
+    bool isCorrect =  await Provider.of<UserProvider>(context, listen: false).changePassword(
+      context: context,
+      email: email,
+      securityCode: securityCode,
+      password: _passwordController.text, 
+      confirmPassword: _passwordConfirmController.text,
+    );
+
+    if (isCorrect) {
+      if (context.mounted) {
+          Navigator.of(context)
+              .pushNamed(
+            SigninScreen.routeName
+          );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    Map<String, dynamic> args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic> ;
+    String email = args['email']!;
+    String securityCode = args['securityCode']!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -46,6 +61,16 @@ class _SignupScreenState extends State<SignupScreen> {
           children: [
             const SizedBox(
               height: 100,
+            ),
+            Center(
+              child: SizedBox.fromSize(
+                child: FittedBox(
+                  child: Icon(
+                    Icons.savings,
+                    size: MediaQuery.of(context).size.width * 0.45,
+                  ),
+                ),
+              ),
             ),
             SafeArea(
               child: Container(
@@ -59,32 +84,23 @@ class _SignupScreenState extends State<SignupScreen> {
                             'HogMaster',
                             style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
                           )
-                      ),
+                      )
+                      ,
                       const Text(
-                        'Create account',
+                        'Recover your account',
                         style: TextStyle(color: Colors.grey),
                       ),
-                      const SizedBox(height: 30.0),
+                      const SizedBox(height: 15.0),
+                                            const Text(
+                        'Enter your new password.',
+                        style: TextStyle(color: Colors.grey, fontSize: 12,),
+                      ),
+                      const SizedBox(height: 15.0),
                       Form(
                           key: _formKey,
                           child: Column(
                             children: [
-                              Container(
-                                decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                                child: TextField(
-                                  controller: _nameController,
-                                  decoration: ThemeHelper().textInputDecoration('Name', 'Enter your name'),
-                                ),
-                              ),
-                              const SizedBox(height: 15.0),
-                              Container(
-                                decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                                child: TextField(
-                                  controller: _emailController,
-                                  decoration: ThemeHelper().textInputDecoration('Email', 'Enter your email'),
-                                ),
-                              ),
-                              const SizedBox(height: 15.0),
+                              const SizedBox(height: 30.0),
                               Container(
                                 decoration: ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextField(
@@ -97,51 +113,50 @@ class _SignupScreenState extends State<SignupScreen> {
                               Container(
                                 decoration: ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextField(
-                                  controller: _confirmPasswordController,
+                                  controller: _passwordConfirmController,
                                   obscureText: true,
-                                  decoration:
-                                      ThemeHelper().textInputDecoration('Confirm Password', 'Confirm your password'),
+                                  decoration: ThemeHelper().textInputDecoration('Password', 'Confirm your password'),
                                 ),
                               ),
                               const SizedBox(height: 15.0),
-                               CustomBtn(
-                                    text: 'Sign In',
+                              CustomBtn(
+                                    text: 'Change Password',
                                     onTap: () {
                                       //if (_signInFormKey.currentState!.validate()) {
                                       setState(() {
-                                        signUpUser();
+                                        changePassword(email, securityCode);
                                       });
                                       //}
                                     },
                                     isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
-                                ),
-                                // child: ElevatedButton(
-                                //   style: ThemeHelper().buttonStyle(),
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                                //     child: Text(
-                                //       'Sign Up'.toUpperCase(),
-                                //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                                //     ),
-                                //   ),
-                                //   onPressed: () {
-                                //     //After successful login we will redirect to profile page. Let's create profile page now
-                                //     Navigator.pushReplacement(
-                                //         context, MaterialPageRoute(builder: (context) => const SignupScreen()));
-                                //   },
-                                // ),
-                              
+                                  )
+                                  // child: ElevatedButton(
+                                  //   style: ThemeHelper().buttonStyle(),
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                  //     child: Text(
+                                  //       'Sign In'.toUpperCase(),
+                                  //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                  //     ),
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     //After successful login we will redirect to profile page. Let's create profile page now
+                                  //     Navigator.pushReplacement(
+                                  //         context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                                  //   },
+                                  // ),
+                                  ,
                               Container(
                                 margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
-                                  const TextSpan(text: "Already have an account? "),
+                                  const TextSpan(text: "Don\'t have an account? "),
                                   TextSpan(
-                                    text: 'Signin',
+                                    text: 'Create',
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         Navigator.push(
-                                            context, MaterialPageRoute(builder: (context) => const SigninScreen()));
+                                            context, MaterialPageRoute(builder: (context) => SignupScreen()));
                                       },
                                     style: TextStyle(fontWeight: FontWeight.bold, color: GlobalVariables.linkTextColor),
                                   ),
