@@ -42,7 +42,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: GlobalVariables.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -65,14 +65,12 @@ class _SigninScreenState extends State<SigninScreen> {
                   margin: const EdgeInsets.fromLTRB(20, 10, 20, 10), // This will be the login form
                   child: Column(
                     children: [
-                       const FittedBox(
-                          fit: BoxFit.fitWidth, 
+                      const FittedBox(
+                          fit: BoxFit.fitWidth,
                           child: Text(
                             'HogMaster',
                             style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
-                          )
-                      )
-                      ,
+                          )),
                       const Text(
                         'Signin into your account',
                         style: TextStyle(color: Colors.grey),
@@ -116,18 +114,17 @@ class _SigninScreenState extends State<SigninScreen> {
                                 ),
                               ),
                               Container(
-              
                                   child: CustomBtn(
-                                    text: 'Sign In',
-                                    onTap: () {
-                                      //if (_signInFormKey.currentState!.validate()) {
-                                      setState(() {
-                                        signInUser();
-                                      });
-                                      //}
-                                    },
-                                    isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
-                                  )
+                                text: 'Sign In',
+                                onTap: () {
+                                  //if (_signInFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    signInUser();
+                                  });
+                                  //}
+                                },
+                                isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
+                              )
                                   // child: ElevatedButton(
                                   //   style: ThemeHelper().buttonStyle(),
                                   //   child: Padding(

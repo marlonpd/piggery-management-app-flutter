@@ -32,11 +32,11 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   }
 
   Future<void> updatePassword() async {
-    bool isCorrect =  await Provider.of<UserProvider>(context, listen: false).updatePassword(
+    bool isCorrect = await Provider.of<UserProvider>(context, listen: false).updatePassword(
       context: context,
       oldPassword: _oldPasswordController.text,
-      password: _passwordController.text, 
-      confirmPassword: _passwordConfirmController.text, 
+      password: _passwordController.text,
+      confirmPassword: _passwordConfirmController.text,
     );
 
     if (isCorrect) {
@@ -50,22 +50,18 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: GlobalVariables.backgroundColor,
       appBar: AppBar(
-        leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios),
-        iconSize: 20.0,
-        onPressed: () { 
-          Navigator.of(context)
-              .pushNamed(
-            RaiseScreen.routeName
-          );
-        },
-      ),
-      centerTitle: true,
-      title: const Text('')),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            iconSize: 20.0,
+            onPressed: () {
+              Navigator.of(context).pushNamed(RaiseScreen.routeName);
+            },
+          ),
+          centerTitle: true,
+          title: const Text('')),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -92,17 +88,18 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                         'Change Password',
                         style: TextStyle(color: Colors.grey),
                       ),
-
                       const SizedBox(height: 15.0),
                       Form(
                           key: _formKey,
                           child: Column(
-                            children: [                          Container(
+                            children: [
+                              Container(
                                 decoration: ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextField(
                                   controller: _oldPasswordController,
                                   obscureText: true,
-                                  decoration: ThemeHelper().textInputDecoration('Old Password', 'Enter your old password'),
+                                  decoration:
+                                      ThemeHelper().textInputDecoration('Old Password', 'Enter your old password'),
                                 ),
                               ),
                               const SizedBox(height: 15.0),
@@ -120,21 +117,22 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                                 child: TextField(
                                   controller: _passwordConfirmController,
                                   obscureText: true,
-                                  decoration: ThemeHelper().textInputDecoration('Confirm Password', 'Confirm your password'),
+                                  decoration:
+                                      ThemeHelper().textInputDecoration('Confirm Password', 'Confirm your password'),
                                 ),
                               ),
                               const SizedBox(height: 15.0),
                               CustomBtn(
-                                    text: 'Change Password',
-                                    onTap: () {
-                                      //if (_signInFormKey.currentState!.validate()) {
-                                      setState(() {
-                                        updatePassword();
-                                      });
-                                      //}
-                                    },
-                                    isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
-                                  )
+                                text: 'Change Password',
+                                onTap: () {
+                                  //if (_signInFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    updatePassword();
+                                  });
+                                  //}
+                                },
+                                isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
+                              )
                             ],
                           )),
                     ],

@@ -33,18 +33,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Future<void> sendSecurityCode() async {
-    bool isSent =  await Provider.of<UserProvider>(context, listen: false).sendSecurityCode(
+    bool isSent = await Provider.of<UserProvider>(context, listen: false).sendSecurityCode(
       context: context,
       email: _emailController.text,
     );
 
     if (isSent) {
       if (context.mounted) {
-          Navigator.of(context)
-              .pushNamed(
-            ConfirmSecurityCodeScreen.routeName,
-            arguments:  _emailController.text,
-          );
+        Navigator.of(context).pushNamed(
+          ConfirmSecurityCodeScreen.routeName,
+          arguments: _emailController.text,
+        );
       }
     }
   }
@@ -52,7 +51,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: GlobalVariables.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -75,22 +74,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   margin: const EdgeInsets.fromLTRB(20, 10, 20, 10), // This will be the login form
                   child: Column(
                     children: [
-                       const FittedBox(
-                          fit: BoxFit.fitWidth, 
+                      const FittedBox(
+                          fit: BoxFit.fitWidth,
                           child: Text(
                             'HogMaster',
                             style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
-                          )
-                      )
-                      ,
+                          )),
                       const Text(
                         'Recover your account',
                         style: TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(height: 15.0),
-                                            const Text(
+                      const Text(
                         'A security code will be sent to your registered email.',
-                        style: TextStyle(color: Colors.grey, fontSize: 12,),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
                       ),
                       const SizedBox(height: 15.0),
                       Form(
@@ -105,20 +105,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 ),
                               ),
                               const SizedBox(height: 30.0),
-    
                               Container(
-              
                                   child: CustomBtn(
-                                    text: 'Send',
-                                    onTap: () {
-                                      //if (_signInFormKey.currentState!.validate()) {
-                                      setState(() {
-                                        sendSecurityCode();
-                                      });
-                                      //}
-                                    },
-                                    isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
-                                  )
+                                text: 'Send',
+                                onTap: () {
+                                  //if (_signInFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    sendSecurityCode();
+                                  });
+                                  //}
+                                },
+                                isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
+                              )
                                   // child: ElevatedButton(
                                   //   style: ThemeHelper().buttonStyle(),
                                   //   child: Padding(

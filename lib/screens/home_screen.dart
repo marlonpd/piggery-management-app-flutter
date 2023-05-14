@@ -39,8 +39,9 @@ class _RaiseScreenState extends State<RaiseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: GlobalVariables.greyBackgroundCOlor,
+      backgroundColor: GlobalVariables.backgroundColor,
       appBar: AppBar(
+        backgroundColor: GlobalVariables.backgroundColor,
         title: const Text('Raised Hog'),
         // leading: GestureDetector(
         //   onTap: () {},
@@ -66,17 +67,14 @@ class _RaiseScreenState extends State<RaiseScreen> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: GlobalVariables.backgroundColor,
               ),
               child: Text('About HogMaster'),
             ),
             ListTile(
               title: const Text('Change Password'),
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed(
-                      UpdatePasswordScreen.routeName
-                    );
+                Navigator.of(context).pushNamed(UpdatePasswordScreen.routeName);
               },
             ),
             ListTile(
@@ -134,34 +132,34 @@ class _RaiseScreenState extends State<RaiseScreen> {
       key: const ValueKey(0),
 
       // The start action pane is the one at the left or the top side.
-      startActionPane: ActionPane(
-        // A motion is a widget used to control how the pane animates.
-        motion: const ScrollMotion(),
+      // startActionPane: ActionPane(
+      //   // A motion is a widget used to control how the pane animates.
+      //   motion: const ScrollMotion(),
 
-        // A pane can dismiss the Slidable.
-        dismissible: DismissiblePane(onDismissed: () {}),
+      //   // A pane can dismiss the Slidable.
+      //   dismissible: DismissiblePane(onDismissed: () {}),
 
-        // All actions are defined in the children parameter.
-        children: [
-          // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
-            onPressed: (_) {
-              Provider.of<Raises>(context, listen: false).deleteRaise(context: context, raise: raise);
-            },
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          ),
-          SlidableAction(
-            onPressed: (_) {},
-            backgroundColor: const Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: Icons.share,
-            label: 'Share',
-          ),
-        ],
-      ),
+      //   // All actions are defined in the children parameter.
+      //   children: [
+      //     // A SlidableAction can have an icon and/or a label.
+      //     SlidableAction(
+      //       onPressed: (_) {
+      //         Provider.of<Raises>(context, listen: false).deleteRaise(context: context, raise: raise);
+      //       },
+      //       backgroundColor: const Color(0xFFFE4A49),
+      //       foregroundColor: Colors.white,
+      //       icon: Icons.delete,
+      //       label: 'Delete',
+      //     ),
+      //     SlidableAction(
+      //       onPressed: (_) {},
+      //       backgroundColor: const Color(0xFF21B7CA),
+      //       foregroundColor: Colors.white,
+      //       icon: Icons.share,
+      //       label: 'Share',
+      //     ),
+      //   ],
+      // ),
 
       // The end action pane is the one at the right or the bottom side.
       endActionPane: ActionPane(
@@ -179,11 +177,13 @@ class _RaiseScreenState extends State<RaiseScreen> {
             label: 'Edit',
           ),
           SlidableAction(
-            onPressed: (_) {},
-            backgroundColor: const Color(0xFF0392CF),
+            onPressed: (_) {
+              Provider.of<Raises>(context, listen: false).deleteRaise(context: context, raise: raise);
+            },
+            backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
-            icon: Icons.save,
-            label: 'Save',
+            icon: Icons.delete,
+            label: 'Delete',
           ),
         ],
       ),

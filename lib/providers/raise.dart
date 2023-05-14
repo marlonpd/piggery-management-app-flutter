@@ -18,6 +18,12 @@ class Raises with ChangeNotifier {
     return [..._items];
   }
 
+  bool _isLoading = false;
+
+  bool get isLoading {
+    return _isLoading;
+  }
+
   Future<void> fetchRaises(BuildContext context) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -72,9 +78,7 @@ class Raises with ChangeNotifier {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
-      log(raise.toJson());
-      log('$uri/api/raise/save');
-      log('Bearer ${userProvider.user.token}');
+      _isLoading = true;
       http.Response res = await http.post(
         Uri.parse('$uri/api/raise/save'),
         headers: {
@@ -91,7 +95,7 @@ class Raises with ChangeNotifier {
           ),
         ),
       );
-
+      _isLoading = false;
       notifyListeners();
 
       if (context.mounted) {
@@ -105,8 +109,8 @@ class Raises with ChangeNotifier {
       }
     } catch (e) {
       showSnackBar(context, e.toString());
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> updateRaise({

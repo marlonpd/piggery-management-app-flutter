@@ -167,13 +167,11 @@ class UserProvider extends ChangeNotifier {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () async {
-
-          },
+          onSuccess: () async {},
         );
       }
 
-      var isSent = (jsonDecode(res.body)); 
+      var isSent = (jsonDecode(res.body));
 
       _isLoading = false;
       notifyListeners();
@@ -209,13 +207,11 @@ class UserProvider extends ChangeNotifier {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () async {
-
-          },
+          onSuccess: () async {},
         );
       }
 
-      var isSent = (jsonDecode(res.body)); 
+      var isSent = (jsonDecode(res.body));
 
       _isLoading = false;
       notifyListeners();
@@ -228,38 +224,28 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-
-  Future<bool> changePassword({
-    required BuildContext context,
-    required String email,
-    required String securityCode,
-    required String password,
-    required String confirmPassword
-  }) async {
+  Future<bool> changePassword(
+      {required BuildContext context,
+      required String email,
+      required String securityCode,
+      required String password,
+      required String confirmPassword}) async {
     try {
       _isLoading = true;
 
-      log(jsonEncode({
-          'email': email,
-          'security_code': securityCode,
-          'password': password, 
-          'password_confirm': confirmPassword
-        }));
+      log(jsonEncode(
+          {'email': email, 'security_code': securityCode, 'password': password, 'password_confirm': confirmPassword}));
 
       http.Response res = await http.post(
         Uri.parse('$uri/api/auth/request-update-password'),
-        body: jsonEncode({
-          'email': email,
-          'security_code': securityCode,
-          'password': password, 
-          'password_confirm': confirmPassword
-        }),
+        body: jsonEncode(
+            {'email': email, 'security_code': securityCode, 'password': password, 'password_confirm': confirmPassword}),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
 
-      var resp = (jsonDecode(res.body)); 
+      var resp = (jsonDecode(res.body));
 
       bool isSuccess = resp['is_success'];
       String msg = resp['msg'];
@@ -285,29 +271,20 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updatePassword({
-    required BuildContext context,
-    required String oldPassword,
-    required String password,
-    required String confirmPassword
-  }) async {
+  Future<bool> updatePassword(
+      {required BuildContext context,
+      required String oldPassword,
+      required String password,
+      required String confirmPassword}) async {
     try {
       _isLoading = true;
 
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      log(jsonEncode({
-          'old_password': oldPassword, 
-          'password': password, 
-          'password_confirm': confirmPassword
-        }));
+      log(jsonEncode({'old_password': oldPassword, 'password': password, 'password_confirm': confirmPassword}));
 
       http.Response res = await http.post(
         Uri.parse('$uri/api/auth/update-password'),
-        body: jsonEncode({
-          'old_password': oldPassword, 
-          'password': password, 
-          'password_confirm': confirmPassword
-        }),
+        body: jsonEncode({'old_password': oldPassword, 'password': password, 'password_confirm': confirmPassword}),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ${userProvider.user.token}',
@@ -316,7 +293,7 @@ class UserProvider extends ChangeNotifier {
       log('await');
       log(res.body.toString());
 
-      var resp = (jsonDecode(res.body)); 
+      var resp = (jsonDecode(res.body));
 
       bool isSuccess = resp['is_success'];
       String msg = resp['msg'];
@@ -380,7 +357,6 @@ class UserProvider extends ChangeNotifier {
           userProvider.setUser(userRes.body);
         }
       }
-
     } catch (e) {
       showSnackBar(context, e.toString());
     }

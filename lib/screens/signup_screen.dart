@@ -36,11 +36,10 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: GlobalVariables.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -53,13 +52,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   margin: const EdgeInsets.fromLTRB(20, 10, 20, 10), // This will be the login form
                   child: Column(
                     children: [
-                       const FittedBox(
-                          fit: BoxFit.fitWidth, 
+                      const FittedBox(
+                          fit: BoxFit.fitWidth,
                           child: Text(
                             'HogMaster',
                             style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
-                          )
-                      ),
+                          )),
                       const Text(
                         'Create account',
                         style: TextStyle(color: Colors.grey),
@@ -104,33 +102,33 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                               ),
                               const SizedBox(height: 15.0),
-                               CustomBtn(
-                                    text: 'Sign up',
-                                    onTap: () {
-                                      //if (_signInFormKey.currentState!.validate()) {
-                                      setState(() {
-                                        signUpUser();
-                                      });
-                                      //}
-                                    },
-                                    isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
-                                ),
-                                // child: ElevatedButton(
-                                //   style: ThemeHelper().buttonStyle(),
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                                //     child: Text(
-                                //       'Sign Up'.toUpperCase(),
-                                //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                                //     ),
-                                //   ),
-                                //   onPressed: () {
-                                //     //After successful login we will redirect to profile page. Let's create profile page now
-                                //     Navigator.pushReplacement(
-                                //         context, MaterialPageRoute(builder: (context) => const SignupScreen()));
-                                //   },
-                                // ),
-                              
+                              CustomBtn(
+                                text: 'Sign up',
+                                onTap: () {
+                                  //if (_signInFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    signUpUser();
+                                  });
+                                  //}
+                                },
+                                isLoading: Provider.of<UserProvider>(context, listen: true).isLoading,
+                              ),
+                              // child: ElevatedButton(
+                              //   style: ThemeHelper().buttonStyle(),
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                              //     child: Text(
+                              //       'Sign Up'.toUpperCase(),
+                              //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                              //     ),
+                              //   ),
+                              //   onPressed: () {
+                              //     //After successful login we will redirect to profile page. Let's create profile page now
+                              //     Navigator.pushReplacement(
+                              //         context, MaterialPageRoute(builder: (context) => const SignupScreen()));
+                              //   },
+                              // ),
+
                               Container(
                                 margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 //child: Text('Don\'t have an account? Create'),

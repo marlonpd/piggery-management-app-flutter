@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/models/raise.dart';
 import 'package:pma/providers/raise.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class CreateRaiseForm extends StatefulWidget {
@@ -35,11 +37,18 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ElevatedButton(
-            onPressed: () {
-              startCreateRaise(context);
+        Padding(
+          padding: const EdgeInsets.only(bottom:20),
+          child: CustomBtn(
+            text: 'Add New',
+            onTap: () {
+              setState(() {
+                startCreateRaise(context);
+              });
             },
-            child: const Text('Add new'))
+            isLoading: false,
+          ),
+        )
       ],
     );
   }
@@ -51,11 +60,15 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
         headCount: int.parse(_headCountController.text),
         name: _nameController.text,
         hogPen: _pigPenController.text);
-    Provider.of<Raises>(ctx, listen: false).addNewRaise(context: context, raise: raise);
+    await Provider.of<Raises>(ctx, listen: false).addNewRaise(context: context, raise: raise);
+    _headCountController.text = '';
+    _nameController.text = '';
+    _headCountController.text = '';
   }
 
   void startCreateRaise(BuildContext ctx) {
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
@@ -66,7 +79,7 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                 padding:
                     EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const Text('Add new livestock to raise'),
                     TextField(
@@ -116,26 +129,31 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                       decoration: const InputDecoration(labelText: 'Pig Pen'),
                       controller: _pigPenController,
                     )),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
+                    Padding(
+                      padding: const EdgeInsets.only(bottom:20),
+                      child: Row(
+                        children: [
+                         
+                                CustomBtn(
+                                  text: 'Cancel',
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  isLoading: false,
+                                )
+                              
+                              ,
+                          const Spacer(),
+                          CustomBtn(
+                            text: 'Create',
+                            onTap: () async{
+                               _addNewRaise(context);
+                               Navigator.pop(context);
                             },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              //setState(() {
-                              _addNewRaise(context);
-                              Navigator.pop(context);
-
-                              //},);
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Create Raise'))
-                      ],
+                            isLoading:  Provider.of<Raises>(context, listen: true).isLoading,
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),

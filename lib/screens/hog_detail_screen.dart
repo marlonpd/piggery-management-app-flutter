@@ -53,7 +53,9 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: GlobalVariables.backgroundColor,
         appBar: AppBar(
+          backgroundColor: GlobalVariables.backgroundColor,
           bottom: TabBar(
             controller: _controller,
             tabs: const [
