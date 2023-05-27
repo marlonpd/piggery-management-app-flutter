@@ -3,10 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:pma/providers/user.dart';
+import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/tab_screens/accounting_screen.dart';
 import 'package:pma/screens/tab_screens/detail_screen.dart';
 import 'package:pma/screens/tab_screens/events_screen.dart';
 import 'package:pma/screens/tab_screens/notes_scrent.dart';
+import 'package:pma/screens/update_password_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../helpers/global_variables.dart';
 import '../models/raise.dart';
@@ -65,7 +69,35 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
               Tab(icon: Icon(Icons.calculate)),
             ],
           ),
-          title: const Text('Hogs'),
+          title: Text('Hogs', style: Theme.of(context).textTheme.headlineLarge,),
+        ),
+        endDrawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: GlobalVariables.backgroundColor,
+                ),
+                child: Text('About HogMaster'),
+              ),
+              ListTile(
+                title: const Text('Change Password'),
+                onTap: () {
+                  Navigator.of(context).pushNamed(UpdatePasswordScreen.routeName);
+                },
+              ),
+              ListTile(
+                title: const Text('Logout'),
+                onTap: () {
+                  Provider.of<UserProvider>(context, listen: false).logoutUser(context);
+                  Navigator.of(context).pushNamed(
+                    SigninScreen.routeName,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         body: TabBarView(
           controller: _controller,

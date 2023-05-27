@@ -29,6 +29,12 @@ class _NotesScreenState extends State<NotesScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Center(
+          child: Text('Notes'),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {

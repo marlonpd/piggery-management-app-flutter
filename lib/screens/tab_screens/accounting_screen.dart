@@ -27,6 +27,12 @@ class _AccountingScreenState extends State<AccountingScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Center(
+          child: Text('Accounting'),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {

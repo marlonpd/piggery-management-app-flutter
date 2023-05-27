@@ -20,6 +20,12 @@ class _DetailScreenState extends State<DetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Center(
+            child: Text('Details'),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Text('Name : ${raise.name}'),
           Text('Type : ${raise.raiseType}'),
           Text('Head count : ${raise.headCount.toString()}'),

@@ -158,10 +158,6 @@ class Notes with ChangeNotifier {
         body: note.toJson(),
       );
 
-      log(res.body.toString());
-
-      log(_items.toList().toString());
-
       if (context.mounted) {
         httpErrorHandle(
           response: res,

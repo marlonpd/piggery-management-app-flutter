@@ -7,6 +7,7 @@ import 'package:pma/screens/hog_detail_screen.dart';
 import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/update_password_screen.dart';
 import 'package:pma/services/auth_service.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/constants.dart';
@@ -42,27 +43,10 @@ class _RaiseScreenState extends State<RaiseScreen> {
       backgroundColor: GlobalVariables.backgroundColor,
       appBar: AppBar(
         backgroundColor: GlobalVariables.backgroundColor,
-        title: const Text('Raised Hog'),
-        // leading: GestureDetector(
-        //   onTap: () {},
-        //   child: const Icon(
-        //     Icons.menu, // add custom icons also
-        //   ),
-        // ),
-        // actions: <Widget>[
-        //   IconButton(
-        //       onPressed: () {
-        //         startCreateNewRaise(context);
-        //       },
-        //       icon: const Icon(Icons.add))
-        // ],
+        title: Text('Raised Hog', style: Theme.of(context).textTheme.headlineLarge,),
       ),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
+      endDrawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
@@ -128,40 +112,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
 
   Widget _raiseItem(BuildContext context, int index, Raise raise) {
     return Slidable(
-      // Specify a key if the Slidable is dismissible.
       key: const ValueKey(0),
-
-      // The start action pane is the one at the left or the top side.
-      // startActionPane: ActionPane(
-      //   // A motion is a widget used to control how the pane animates.
-      //   motion: const ScrollMotion(),
-
-      //   // A pane can dismiss the Slidable.
-      //   dismissible: DismissiblePane(onDismissed: () {}),
-
-      //   // All actions are defined in the children parameter.
-      //   children: [
-      //     // A SlidableAction can have an icon and/or a label.
-      //     SlidableAction(
-      //       onPressed: (_) {
-      //         Provider.of<Raises>(context, listen: false).deleteRaise(context: context, raise: raise);
-      //       },
-      //       backgroundColor: const Color(0xFFFE4A49),
-      //       foregroundColor: Colors.white,
-      //       icon: Icons.delete,
-      //       label: 'Delete',
-      //     ),
-      //     SlidableAction(
-      //       onPressed: (_) {},
-      //       backgroundColor: const Color(0xFF21B7CA),
-      //       foregroundColor: Colors.white,
-      //       icon: Icons.share,
-      //       label: 'Share',
-      //     ),
-      //   ],
-      // ),
-
-      // The end action pane is the one at the right or the bottom side.
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
@@ -187,9 +138,6 @@ class _RaiseScreenState extends State<RaiseScreen> {
           ),
         ],
       ),
-
-      // The child of the Slidable is what the user sees when the
-      // component is not dragged.
       child: GestureDetector(
           child: ListTile(
             title: Text(
@@ -238,97 +186,140 @@ class _RaiseScreenState extends State<RaiseScreen> {
   }
 
   void _startEditRaise(BuildContext ctx, Raise raise) {
+    bool _validateName = false;
+    bool _validatePenName = false;
+    bool _validateHeadCount= false;
     _nameController.text = raise.name;
     _headCountController.text = raise.headCount.toString();
     _pigPenController.text = raise.hogPen;
     _raiseType = raise.raiseType;
 
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
-              child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Update livestock to raise'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Name'),
-                      controller: _nameController,
-                    ),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(
-                            height: 10,
+            return Container(
+
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Text('Update livestock to raise',  style: Theme.of(context).textTheme.headlineSmall,),
+                        TextField(
+                            decoration: InputDecoration(labelText: 'Name', 
+                            errorText: _validateName ? 'Value Can\'t Be Empty' : null,
                           ),
-                          const Text('What type are you going to raise?'),
-                          DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                            hint: Text(
-                              'Select Item',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).hintColor,
+                          controller: _nameController,
+                        ),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(
+                                height: 10,
                               ),
-                            ),
-                            items: _dropdownMenuOptions,
-                            value: _raiseType,
-                            onChanged: (value) {
-                              setState(() {
-                                _raiseType = value as String;
-                              });
-                            },
-                            buttonStyleData: const ButtonStyleData(
-                              height: 40,
-                              width: 140,
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                            ),
+                              const Text('What type are you going to raise?'),
+                              DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                hint: Text(
+                                  'Select Item',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                ),
+                                items: _dropdownMenuOptions,
+                                value: _raiseType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _raiseType = value as String;
+                                  });
+                                },
+                                buttonStyleData: const ButtonStyleData(
+                                  height: 40,
+                                  width: 140,
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                ),
+                              )),
+                            ]),
+                        if (_raiseType == 'fattener')
+                          Container(
+                              child: TextField(
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(labelText: 'Head Count',  errorText: _validateHeadCount ? 'Value Can\'t Be Empty' : null,),
+                            controller: _headCountController,
                           )),
-                        ]),
-                    Expanded(
-                        child: TextField(
-                      decoration: const InputDecoration(labelText: 'Head Count'),
-                      controller: _headCountController,
-                    )),
-                    Expanded(
-                        child: TextField(
-                      decoration: const InputDecoration(labelText: 'Pig Pen'),
-                      controller: _pigPenController,
-                    )),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              final Raise updateRaise = Raise(
-                                  id: raise.id,
-                                  raiseType: _raiseType,
-                                  headCount: int.parse(_headCountController.text),
-                                  name: _nameController.text,
-                                  hogPen: _pigPenController.text);
-                              _updateRaise(ctx, updateRaise);
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Update Raise'))
+                        Container(
+                            child: TextField(
+                          decoration: InputDecoration(labelText: 'Pen Name', 
+                             errorText: _validatePenName ? 'Value Can\'t Be Empty' : null,
+                          ),
+                          controller: _pigPenController,
+                        )),
+                        Padding(
+                          padding: const EdgeInsets.only(top:10.0, bottom: 20),
+                          child: Row(
+                            children: [
+                              CustomBtn(
+                                  text: 'Cancel',
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  isLoading: false,
+                                ),
+                                
+                              const Spacer(),
+                              CustomBtn(
+                                  text: 'Create',
+                                  onTap: () {
+                        
+                                    setState(() {
+                                      if (_nameController.text.isEmpty) {
+                                          _validateName = true;
+                                          return;
+                                      }
+                        
+                                      if (_raiseType == 'fattener' && _headCountController.text.isEmpty) {
+                                        _validateHeadCount = true;
+                                        return;
+                                      }
+                        
+                                      if (_pigPenController.text.isEmpty) {
+                                          _validatePenName = true;
+                                          return;
+                                      }
+                        
+                                      if (!_nameController.text.isEmpty && !_pigPenController.text.isEmpty) { 
+                                        final Raise updateRaise = Raise(
+                                            id: raise.id,
+                                            raiseType: _raiseType,
+                                            headCount: int.parse(_headCountController.text),
+                                            name: _nameController.text,
+                                            hogPen: _pigPenController.text);
+                                        _updateRaise(ctx, updateRaise);
+                                        Navigator.pop(context);
+                                      }
+                                      
+                                    });
+                        
+                                  },
+                                  isLoading: Provider.of<Raises>(context, listen: true).isLoading,
+                                  )
+                            ],
+                          ),
+                        )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
             );

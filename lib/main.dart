@@ -61,6 +61,10 @@ class _FarmAppState extends State<FarmApp> {
           debugShowCheckedModeBanner: false,
           title: 'Farmland - Piggery',
           theme: ThemeData(
+            textTheme: const TextTheme(
+              headlineLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+              headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
             pageTransitionsTheme: const PageTransitionsTheme(builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             }),

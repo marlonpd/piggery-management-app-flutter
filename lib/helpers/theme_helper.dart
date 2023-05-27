@@ -88,4 +88,8 @@ class ThemeHelper {
       ],
     );
   }
+
+  TextStyle formHeaderTextStyle() {
+    return TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0);
+  }
 }

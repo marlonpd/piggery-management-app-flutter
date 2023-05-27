@@ -28,6 +28,12 @@ class _EventsScreenState extends State<EventsScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Center(
+          child: Text('Events'),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {
