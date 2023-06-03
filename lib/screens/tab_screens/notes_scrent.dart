@@ -32,7 +32,10 @@ class _NotesScreenState extends State<NotesScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Center(
-          child: Text('Notes', style: Theme.of(context).textTheme.headlineSmall,),
+          child: Text(
+            'Notes',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
         ),
         SizedBox(
           height: 10,
@@ -54,7 +57,7 @@ class _NotesScreenState extends State<NotesScreen> {
                       ),
                     )
                   : Consumer<Notes>(
-                      child: const Center(child: Text('No raised hog added')),
+                      child: const Center(child: Text('No notes added.')),
                       builder: (ctxx, notes, child) {
                         if (notes.items.isEmpty) {
                           return child as Widget;
@@ -93,16 +96,17 @@ class _NotesScreenState extends State<NotesScreen> {
               // _startEditRaise(context, raise);
               _startEditNote(context, note);
             },
-            backgroundColor: const Color(0xFF7BC043),
+            backgroundColor: Color.fromARGB(255, 153, 212, 104),
             foregroundColor: Colors.white,
             icon: Icons.edit,
             label: 'Edit',
           ),
           SlidableAction(
+            flex: 2,
             onPressed: (_) {
               Provider.of<Notes>(context, listen: false).deleteNote(context: context, note: note);
             },
-            backgroundColor: const Color(0xFFFE4A49),
+            backgroundColor: Color.fromARGB(255, 228, 111, 111),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
@@ -114,6 +118,9 @@ class _NotesScreenState extends State<NotesScreen> {
       // component is not dragged.
       child: GestureDetector(
           child: ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             title: Text(
               note.title,
             ),
@@ -204,7 +211,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                   }
 
                                   note.title = _titleController.text;
-                                  note.description = _descriptionController.text; 
+                                  note.description = _descriptionController.text;
 
                                   _updateNote(context, note);
                                   Navigator.pop(context);

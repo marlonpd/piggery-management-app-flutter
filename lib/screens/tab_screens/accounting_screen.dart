@@ -28,7 +28,10 @@ class _AccountingScreenState extends State<AccountingScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Center(
-          child: Text('Accounting', style: Theme.of(context).textTheme.headlineSmall,),
+          child: Text(
+            'Accounting',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
         ),
         SizedBox(
           height: 10,

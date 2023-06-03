@@ -111,7 +111,6 @@ class Notes with ChangeNotifier {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
-
       _isLoading = true;
       final ndx = _items.indexWhere((item) => item.id == note.id);
 
@@ -132,7 +131,6 @@ class Notes with ChangeNotifier {
         },
         body: note.toJson(),
       );
-
 
       _isLoading = false;
       notifyListeners();

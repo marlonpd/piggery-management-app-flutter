@@ -143,6 +143,9 @@ class _RaiseScreenState extends State<RaiseScreen> {
       ),
       child: GestureDetector(
           child: ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             title: Text(
               raise.name,
             ),

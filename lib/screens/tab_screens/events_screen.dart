@@ -29,7 +29,10 @@ class _EventsScreenState extends State<EventsScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Center(
-          child: Text('Events', style: Theme.of(context).textTheme.headlineSmall,),
+          child: Text(
+            'Events',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
         ),
         SizedBox(
           height: 10,
@@ -51,7 +54,7 @@ class _EventsScreenState extends State<EventsScreen> {
                       ),
                     )
                   : Consumer<Events>(
-                      child: const Center(child: Text('No raised hog added')),
+                      child: const Center(child: Text('No events added')),
                       builder: (ctxx, events, child) {
                         if (events.items.isEmpty) {
                           return child as Widget;
@@ -121,6 +124,9 @@ class _EventsScreenState extends State<EventsScreen> {
       // component is not dragged.
       child: GestureDetector(
           child: ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             title: Text(
               event.title,
             ),

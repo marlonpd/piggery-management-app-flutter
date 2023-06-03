@@ -45,7 +45,7 @@ class _CreateNoteFormState extends State<CreateNoteForm> {
               onPressed: () {
                 startCreateNote(context, raiseId);
               },
-              child: const Text('Add new')),
+              child: const Text('Add New')),
         )
       ],
     );
