@@ -69,7 +69,10 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
               Tab(icon: Icon(Icons.calculate)),
             ],
           ),
-          title: Text('Hogs', style: Theme.of(context).textTheme.headlineLarge,),
+          title: Text(
+            'Hogs',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
         ),
         endDrawer: Drawer(
           child: ListView(

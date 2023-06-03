@@ -29,7 +29,7 @@ class _EventsScreenState extends State<EventsScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Center(
-          child: Text('Events'),
+          child: Text('Events', style: Theme.of(context).textTheme.headlineSmall,),
         ),
         SizedBox(
           height: 10,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:pma/helpers/global_variables.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pma/models/note.dart';
@@ -37,16 +39,19 @@ class _CreateNoteFormState extends State<CreateNoteForm> {
 
     return Column(
       children: <Widget>[
-        ElevatedButton(
-            onPressed: () {
-              startCreateNote(context, raiseId);
-            },
-            child: const Text('Add new'))
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: ElevatedButton(
+              onPressed: () {
+                startCreateNote(context, raiseId);
+              },
+              child: const Text('Add new')),
+        )
       ],
     );
   }
 
-  Future<void> _addNewRaise(ctx, raiseId) async {
+  Future<void> _addNewNote(ctx, raiseId) async {
     final Note note = Note(
       id: '',
       title: _titleController.text,
@@ -59,52 +64,80 @@ class _CreateNoteFormState extends State<CreateNoteForm> {
   }
 
   void startCreateNote(BuildContext ctx, String raiseId) {
+    bool validateTitle = false;
+    bool validateDescription = false;
+    _titleController.text = '';
+    _descriptionController.text = '';
+
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
+            return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Add new note.'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Title'),
-                      controller: _titleController,
-                    ),
-                    Expanded(
-                        child: TextField(
-                      maxLines: 10,
-                      decoration: const InputDecoration(labelText: 'Description'),
-                      controller: _descriptionController,
-                    )),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              //setState(() {
-                              _addNewRaise(context, raiseId);
-                              Navigator.pop(context);
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Add Note',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          errorText: validateTitle ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _titleController,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          errorText: validateDescription ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _descriptionController,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          children: [
+                            CustomBtn(
+                              text: 'Cancel',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              isLoading: false,
+                            ),
+                            const Spacer(),
+                            CustomBtn(
+                              text: 'Create',
+                              onTap: () async {
+                                setState(() {
+                                  if (_titleController.text.isEmpty) {
+                                    validateTitle = true;
+                                    return;
+                                  }
 
-                              //},);
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Add Note'))
-                      ],
-                    )
-                  ],
+                                  if (_descriptionController.text.isEmpty) {
+                                    validateDescription = true;
+                                    return;
+                                  }
+
+                                  _addNewNote(context, raiseId);
+                                  Navigator.pop(context);
+                                });
+                              },
+                              isLoading: Provider.of<Notes>(context, listen: true).isLoading,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

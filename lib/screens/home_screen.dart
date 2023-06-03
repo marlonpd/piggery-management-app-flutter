@@ -43,7 +43,10 @@ class _RaiseScreenState extends State<RaiseScreen> {
       backgroundColor: GlobalVariables.backgroundColor,
       appBar: AppBar(
         backgroundColor: GlobalVariables.backgroundColor,
-        title: Text('Raised Hog', style: Theme.of(context).textTheme.headlineLarge,),
+        title: Text(
+          'Raised Hog',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
       ),
       endDrawer: Drawer(
         child: ListView(
@@ -188,7 +191,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
   void _startEditRaise(BuildContext ctx, Raise raise) {
     bool _validateName = false;
     bool _validatePenName = false;
-    bool _validateHeadCount= false;
+    bool _validateHeadCount = false;
     _nameController.text = raise.name;
     _headCountController.text = raise.headCount.toString();
     _pigPenController.text = raise.hogPen;
@@ -201,19 +204,21 @@ class _RaiseScreenState extends State<RaiseScreen> {
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
             return Container(
-
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                   child: Padding(
-                    padding:
-                        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text('Update livestock to raise',  style: Theme.of(context).textTheme.headlineSmall,),
+                        Text(
+                          'Update Livestock',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
                         TextField(
-                            decoration: InputDecoration(labelText: 'Name', 
+                          decoration: InputDecoration(
+                            labelText: 'Name',
                             errorText: _validateName ? 'Value Can\'t Be Empty' : null,
                           ),
                           controller: _nameController,
@@ -255,65 +260,65 @@ class _RaiseScreenState extends State<RaiseScreen> {
                           Container(
                               child: TextField(
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'Head Count',  errorText: _validateHeadCount ? 'Value Can\'t Be Empty' : null,),
+                            decoration: InputDecoration(
+                              labelText: 'Head Count',
+                              errorText: _validateHeadCount ? 'Value Can\'t Be Empty' : null,
+                            ),
                             controller: _headCountController,
                           )),
                         Container(
                             child: TextField(
-                          decoration: InputDecoration(labelText: 'Pen Name', 
-                             errorText: _validatePenName ? 'Value Can\'t Be Empty' : null,
+                          decoration: InputDecoration(
+                            labelText: 'Pen Name',
+                            errorText: _validatePenName ? 'Value Can\'t Be Empty' : null,
                           ),
                           controller: _pigPenController,
                         )),
                         Padding(
-                          padding: const EdgeInsets.only(top:10.0, bottom: 20),
+                          padding: const EdgeInsets.only(top: 10.0, bottom: 20),
                           child: Row(
                             children: [
                               CustomBtn(
-                                  text: 'Cancel',
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  isLoading: false,
-                                ),
-                                
+                                text: 'Cancel',
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                isLoading: false,
+                              ),
                               const Spacer(),
                               CustomBtn(
-                                  text: 'Create',
-                                  onTap: () {
-                        
-                                    setState(() {
-                                      if (_nameController.text.isEmpty) {
-                                          _validateName = true;
-                                          return;
-                                      }
-                        
-                                      if (_raiseType == 'fattener' && _headCountController.text.isEmpty) {
-                                        _validateHeadCount = true;
-                                        return;
-                                      }
-                        
-                                      if (_pigPenController.text.isEmpty) {
-                                          _validatePenName = true;
-                                          return;
-                                      }
-                        
-                                      if (!_nameController.text.isEmpty && !_pigPenController.text.isEmpty) { 
-                                        final Raise updateRaise = Raise(
-                                            id: raise.id,
-                                            raiseType: _raiseType,
-                                            headCount: int.parse(_headCountController.text),
-                                            name: _nameController.text,
-                                            hogPen: _pigPenController.text);
-                                        _updateRaise(ctx, updateRaise);
-                                        Navigator.pop(context);
-                                      }
-                                      
-                                    });
-                        
-                                  },
-                                  isLoading: Provider.of<Raises>(context, listen: true).isLoading,
-                                  )
+                                text: 'Update',
+                                onTap: () {
+                                  setState(() {
+                                    if (_nameController.text.isEmpty) {
+                                      _validateName = true;
+                                      return;
+                                    }
+
+                                    if (_raiseType == 'fattener' && _headCountController.text.isEmpty) {
+                                      _validateHeadCount = true;
+                                      return;
+                                    }
+
+                                    if (_pigPenController.text.isEmpty) {
+                                      _validatePenName = true;
+                                      return;
+                                    }
+
+                                    if (!_nameController.text.isEmpty && !_pigPenController.text.isEmpty) {
+                                      final Raise updateRaise = Raise(
+                                          id: raise.id,
+                                          raiseType: _raiseType,
+                                          headCount: int.parse(_headCountController.text),
+                                          name: _nameController.text,
+                                          hogPen: _pigPenController.text);
+                                      _updateRaise(ctx, updateRaise);
+                                      Navigator.pop(context);
+                                    }
+                                  });
+                                },
+                                isLoading: Provider.of<Raises>(context, listen: true).isLoading,
+                              )
                             ],
                           ),
                         )

@@ -71,11 +71,10 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
   // final _headCountController = TextEditingController();
   // final _pigPenController = TextEditingController();
 
-
   void startCreateRaise(BuildContext ctx) {
     bool _validateName = false;
     bool _validatePenName = false;
-    bool _validateHeadCount= false;
+    bool _validateHeadCount = false;
     _nameController.text = '';
     _headCountController.text = '';
     _pigPenController.text = '';
@@ -87,21 +86,21 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
             return Container(
-
               child: SingleChildScrollView(
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Add new livestock to raise', 
+                        Text(
+                          'Add new livestock to raise',
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                         TextField(
-                            decoration: InputDecoration(labelText: 'Name', 
+                          decoration: InputDecoration(
+                            labelText: 'Name',
                             errorText: _validateName ? 'Value Can\'t Be Empty' : null,
                           ),
                           controller: _nameController,
@@ -143,18 +142,22 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                           Container(
                               child: TextField(
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'Head Count',  errorText: _validateHeadCount ? 'Value Can\'t Be Empty' : null,),
+                            decoration: InputDecoration(
+                              labelText: 'Head Count',
+                              errorText: _validateHeadCount ? 'Value Can\'t Be Empty' : null,
+                            ),
                             controller: _headCountController,
                           )),
                         Container(
                             child: TextField(
-                          decoration: InputDecoration(labelText: 'Pen Name', 
-                             errorText: _validatePenName ? 'Value Can\'t Be Empty' : null,
+                          decoration: InputDecoration(
+                            labelText: 'Pen Name',
+                            errorText: _validatePenName ? 'Value Can\'t Be Empty' : null,
                           ),
                           controller: _pigPenController,
                         )),
                         Padding(
-                          padding: const EdgeInsets.only(top:10.0, bottom: 20),
+                          padding: const EdgeInsets.only(top: 10.0, bottom: 20),
                           child: Row(
                             children: [
                               CustomBtn(
@@ -170,8 +173,8 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                                 onTap: () async {
                                   setState(() {
                                     if (_nameController.text.isEmpty) {
-                                        _validateName = true;
-                                        return;
+                                      _validateName = true;
+                                      return;
                                     }
 
                                     if (_raiseType == 'fattener' && _headCountController.text.isEmpty) {
@@ -180,15 +183,14 @@ class _CreateRaiseFormState extends State<CreateRaiseForm> {
                                     }
 
                                     if (_pigPenController.text.isEmpty) {
-                                        _validatePenName = true;
-                                        return;
+                                      _validatePenName = true;
+                                      return;
                                     }
 
-                                    if (!_nameController.text.isEmpty && !_pigPenController.text.isEmpty) { 
+                                    if (!_nameController.text.isEmpty && !_pigPenController.text.isEmpty) {
                                       _addNewRaise(context);
                                       Navigator.pop(context);
                                     }
-                                    
                                   });
                                 },
                                 isLoading: Provider.of<Raises>(context, listen: true).isLoading,

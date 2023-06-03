@@ -4,8 +4,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/helpers/utils.dart';
 import 'package:pma/providers/note.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -30,7 +32,7 @@ class _NotesScreenState extends State<NotesScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Center(
-          child: Text('Notes'),
+          child: Text('Notes', style: Theme.of(context).textTheme.headlineSmall,),
         ),
         SizedBox(
           height: 10,
@@ -78,27 +80,7 @@ class _NotesScreenState extends State<NotesScreen> {
       key: const ValueKey(0),
 
       // The start action pane is the one at the left or the top side.
-      startActionPane: ActionPane(
-        // A motion is a widget used to control how the pane animates.
-        motion: const ScrollMotion(),
-
-        // A pane can dismiss the Slidable.
-        dismissible: DismissiblePane(onDismissed: () {}),
-
-        // All actions are defined in the children parameter.
-        children: [
-          // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
-            onPressed: (_) {
-              Provider.of<Notes>(context, listen: false).deleteNote(context: context, note: note);
-            },
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          ),
-        ],
-      ),
+      startActionPane: null,
 
       // The end action pane is the one at the right or the bottom side.
       endActionPane: ActionPane(
@@ -116,6 +98,15 @@ class _NotesScreenState extends State<NotesScreen> {
             icon: Icons.edit,
             label: 'Edit',
           ),
+          SlidableAction(
+            onPressed: (_) {
+              Provider.of<Notes>(context, listen: false).deleteNote(context: context, note: note);
+            },
+            backgroundColor: const Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          )
         ],
       ),
 
@@ -146,61 +137,86 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   void _startEditNote(BuildContext ctx, Note note) {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
+    final _titleController = TextEditingController();
+    final _descriptionController = TextEditingController();
+    bool validateTitle = false;
+    bool validateDescription = false;
 
-    titleController.text = note.title;
-    descriptionController.text = note.description;
+    _titleController.text = note.title;
+    _descriptionController.text = note.description;
 
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
+            return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Add new note.'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Title'),
-                      controller: titleController,
-                    ),
-                    Expanded(
-                        child: TextField(
-                      maxLines: 10,
-                      decoration: const InputDecoration(labelText: 'Description'),
-                      controller: descriptionController,
-                    )),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              setState(
-                                () {
-                                  note.title = titleController.text;
-                                  note.description = descriptionController.text;
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Add Note',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          errorText: validateTitle ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _titleController,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          errorText: validateDescription ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _descriptionController,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          children: [
+                            CustomBtn(
+                              text: 'Cancel',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              isLoading: false,
+                            ),
+                            const Spacer(),
+                            CustomBtn(
+                              text: 'Update',
+                              onTap: () async {
+                                setState(() {
+                                  if (_titleController.text.isEmpty) {
+                                    validateTitle = true;
+                                    return;
+                                  }
+
+                                  if (_descriptionController.text.isEmpty) {
+                                    validateDescription = true;
+                                    return;
+                                  }
+
+                                  note.title = _titleController.text;
+                                  note.description = _descriptionController.text; 
+
                                   _updateNote(context, note);
                                   Navigator.pop(context);
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Update Note'))
-                      ],
-                    )
-                  ],
+                                });
+                              },
+                              isLoading: Provider.of<Notes>(context, listen: true).isLoading,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

@@ -14,6 +14,12 @@ import 'dart:developer';
 class Notes with ChangeNotifier {
   final List<Note> _items = [];
 
+  bool _isLoading = false;
+
+  bool get isLoading {
+    return _isLoading;
+  }
+
   List<Note> get items {
     return [..._items];
   }
@@ -61,9 +67,7 @@ class Notes with ChangeNotifier {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
-      log(note.toJson());
-      log('$uri/api/note/save');
-      log('Bearer ${userProvider.user.token}');
+      _isLoading = true;
       http.Response res = await http.post(
         Uri.parse('$uri/api/note/save'),
         headers: {
@@ -83,6 +87,7 @@ class Notes with ChangeNotifier {
         ),
       );
 
+      _isLoading = false;
       notifyListeners();
 
       if (context.mounted) {
@@ -97,7 +102,6 @@ class Notes with ChangeNotifier {
     } catch (e) {
       showSnackBar(context, e.toString());
     }
-    notifyListeners();
   }
 
   Future<void> updateNote({
@@ -107,14 +111,17 @@ class Notes with ChangeNotifier {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
+
+      _isLoading = true;
       final ndx = _items.indexWhere((item) => item.id == note.id);
+
+      log(note.toJson());
 
       if (ndx >= 0) {
         _items[ndx].title = note.title;
         _items[ndx].description = note.description;
         _items[ndx].createdAt = note.createdAt;
         _items[ndx].updatedAt = note.updatedAt;
-        notifyListeners();
       }
 
       http.Response res = await http.post(
@@ -126,6 +133,10 @@ class Notes with ChangeNotifier {
         body: note.toJson(),
       );
 
+
+      _isLoading = false;
+      notifyListeners();
+
       if (context.mounted) {
         httpErrorHandle(
           response: res,
@@ -136,7 +147,6 @@ class Notes with ChangeNotifier {
     } catch (e) {
       showSnackBar(context, e.toString());
     }
-    //notifyListeners();
   }
 
   Future<void> deleteNote({

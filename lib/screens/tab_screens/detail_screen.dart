@@ -21,7 +21,7 @@ class _DetailScreenState extends State<DetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Text('Details'),
+            child: Text('Details', style: Theme.of(context).textTheme.headlineSmall,),
           ),
           SizedBox(
             height: 10,
