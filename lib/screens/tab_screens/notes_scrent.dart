@@ -167,7 +167,7 @@ class _NotesScreenState extends State<NotesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Add Note',
+                        'Update Note',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       TextField(

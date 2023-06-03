@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/helpers/utils.dart';
 import 'package:pma/models/event.dart';
 import 'package:pma/models/raise.dart';
 import 'package:pma/providers/event.dart';
 import 'package:pma/widgets/create_event_form.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class EventsScreen extends StatefulWidget {
@@ -35,7 +37,7 @@ class _EventsScreenState extends State<EventsScreen> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 3,
         ),
         Expanded(
           child: RefreshIndicator(
@@ -80,27 +82,7 @@ class _EventsScreenState extends State<EventsScreen> {
       key: const ValueKey(0),
 
       // The start action pane is the one at the left or the top side.
-      startActionPane: ActionPane(
-        // A motion is a widget used to control how the pane animates.
-        motion: const ScrollMotion(),
-
-        // A pane can dismiss the Slidable.
-        dismissible: DismissiblePane(onDismissed: () {}),
-
-        // All actions are defined in the children parameter.
-        children: [
-          // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
-            onPressed: (_) {
-              Provider.of<Events>(context, listen: false).deleteEvent(context: context, event: event);
-            },
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          ),
-        ],
-      ),
+      startActionPane: null,
 
       // The end action pane is the one at the right or the bottom side.
       endActionPane: ActionPane(
@@ -112,10 +94,19 @@ class _EventsScreenState extends State<EventsScreen> {
             onPressed: (_) {
               _startEditEvent(context, event);
             },
-            backgroundColor: const Color(0xFF7BC043),
+            backgroundColor: const Color.fromARGB(255, 153, 212, 104),
             foregroundColor: Colors.white,
             icon: Icons.edit,
             label: 'Edit',
+          ),
+           SlidableAction(
+            onPressed: (_) {
+              Provider.of<Events>(context, listen: false).deleteEvent(context: context, event: event);
+            },
+            backgroundColor: const Color.fromARGB(255, 228, 111, 111),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
           ),
         ],
       ),
@@ -146,74 +137,95 @@ class _EventsScreenState extends State<EventsScreen> {
   }
 
   void _startEditEvent(BuildContext ctx, Event event) {
+    bool validateTitle = false;
+    bool validateEventDate = false;
     final titleController = TextEditingController();
     DateTime selectedDate = DateTime.parse(event.eventDate);
     titleController.text = event.title;
 
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
+            return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Add new note.'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Title'),
-                      controller: titleController,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: DateTimeField(
-                          decoration: const InputDecoration(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Edit Event',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          errorText: validateTitle ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: titleController,
+                      ),
+                      SizedBox(height: 10.0,),
+                       DateTimeFormField(
+                          decoration: InputDecoration(
                             hintStyle: TextStyle(color: Colors.black45),
                             errorStyle: TextStyle(color: Colors.redAccent),
                             border: OutlineInputBorder(),
                             suffixIcon: Icon(Icons.event_note),
                             labelText: 'Event Date',
+                             errorText: validateEventDate ? 'Value Can\'t Be Empty' : null,
                           ),
                           mode: DateTimeFieldPickerMode.date,
-                          // autovalidateMode: AutovalidateMode.always,
-                          // validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-                          selectedDate: selectedDate,
+                          autovalidateMode: AutovalidateMode.always,
+                          validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+                          //selectedDate: selectedDate,
                           onDateSelected: (DateTime value) {
-                            setState(() {
-                              selectedDate = value;
-                            });
-                            print(selectedDate.toIso8601String());
+                            selectedDate = value;
+                            print(value.toIso8601String());
                           },
-                        )),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              setState(
-                                () {
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          children: [
+                            CustomBtn(
+                              text: 'Cancel',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              isLoading: false,
+                            ),
+                            const Spacer(),
+                            CustomBtn(
+                              text: 'Update',
+                              onTap: () async {
+                                setState(() {
+                                  if (titleController.text.isEmpty) {
+                                    validateTitle = true;
+                                    return;
+                                  }
+
+                                  if (selectedDate.toString().isEmpty) {
+                                    validateEventDate = true;
+                                    return;
+                                  }
+
                                   event.title = titleController.text;
                                   event.eventDate = selectedDate.toString();
                                   _updateEvent(context, event);
                                   Navigator.pop(context);
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Update Event'))
-                      ],
-                    )
-                  ],
+                                });
+                              },
+                              isLoading: Provider.of<Events>(context, listen: true).isLoading,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

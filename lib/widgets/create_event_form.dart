@@ -2,8 +2,10 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/models/event.dart';
 import 'package:pma/providers/event.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class CreateEventForm extends StatefulWidget {
@@ -30,7 +32,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
             onPressed: () {
               startCreateEvent(context, raiseId);
             },
-            child: const Text('Add new'))
+            child: const Text('Add New'))
       ],
     );
   }
@@ -49,33 +51,44 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   void startCreateEvent(BuildContext ctx, String raiseId) {
     DateTime? selectedDate;
+    bool validateTitle = false;
+    bool validateEventDate = false;
+    _titleController.text = '';
+
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
+            return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Add new note.'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Title'),
-                      controller: _titleController,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: DateTimeFormField(
-                          decoration: const InputDecoration(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Add Event',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          errorText: validateTitle ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _titleController,
+                      ),
+                      SizedBox(height: 10.0,),
+                       DateTimeFormField(
+                          decoration: InputDecoration(
                             hintStyle: TextStyle(color: Colors.black45),
                             errorStyle: TextStyle(color: Colors.redAccent),
                             border: OutlineInputBorder(),
                             suffixIcon: Icon(Icons.event_note),
                             labelText: 'Event Date',
+                             errorText: validateEventDate ? 'Value Can\'t Be Empty' : null,
                           ),
                           mode: DateTimeFieldPickerMode.date,
                           autovalidateMode: AutovalidateMode.always,
@@ -85,29 +98,44 @@ class _CreateEventFormState extends State<CreateEventForm> {
                             selectedDate = value;
                             print(value.toIso8601String());
                           },
-                        )),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              //setState(() {
-                              _addNewEvent(context, raiseId, selectedDate.toString());
-                              Navigator.pop(context);
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          children: [
+                            CustomBtn(
+                              text: 'Cancel',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              isLoading: false,
+                            ),
+                            const Spacer(),
+                            CustomBtn(
+                              text: 'Create',
+                              onTap: () async {
+                                setState(() {
+                                  if (_titleController.text.isEmpty) {
+                                    validateTitle = true;
+                                    return;
+                                  }
 
-                              //},);
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Add Note'))
-                      ],
-                    )
-                  ],
+                                  if (selectedDate.toString().isEmpty) {
+                                    validateEventDate = true;
+                                    return;
+                                  }
+
+                                  _addNewEvent(context, raiseId, selectedDate.toString());
+                                  Navigator.pop(context);
+                                });
+                              },
+                              isLoading: Provider.of<Events>(context, listen: true).isLoading,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );
