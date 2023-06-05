@@ -2,8 +2,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pma/helpers/constants.dart';
+import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/models/accounting.dart';
 import 'package:pma/providers/accounting.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class CreateAccountingForm extends StatefulWidget {
@@ -37,11 +39,14 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
 
     return Column(
       children: <Widget>[
-        ElevatedButton(
-            onPressed: () {
-              startCreateAccounting(context, raiseId);
-            },
-            child: const Text('Add new'))
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: ElevatedButton(
+              onPressed: () {
+                startCreateAccounting(context, raiseId);
+              },
+              child: const Text('Add New')),
+        )
       ],
     );
   }
@@ -51,26 +56,37 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
   }
 
   void startCreateAccounting(BuildContext ctx, String raiseId) {
-    DateTime? selectedDate;
+    bool validateDescription = false;
+    bool validateAmount = false;
+    _descriptionController.text = '';
+
+
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
+            return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Add new expenses/income'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Description'),
-                      controller: _descriptionController,
-                    ),
-                    Column(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+
+                       Text('Add New Expenses/Income',
+                        style: Theme.of(context).textTheme.headlineSmall),
+                    
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          errorText: validateDescription ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _descriptionController,
+                      ),
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -102,44 +118,49 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
                               height: 40,
                             ),
                           )),
-                        ]),
-                    Expanded(
-                        child: TextField(
-                            decoration: const InputDecoration(labelText: 'Amount'),
+                        ])
+                      ,
+                      TextField(
+                            decoration: InputDecoration(labelText: 'Amount',  errorText: validateAmount ? 'Value Can\'t Be Empty' : null,),
                             controller: _amountController,
                             keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly])),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              //setState(() {
-                              final Accounting accounting = Accounting(
-                                id: '',
-                                raiseId: raiseId,
-                                description: _descriptionController.text,
-                                entryType: _entryType,
-                                amount: double.parse(_amountController.text),
-                                createdAt: '',
-                                updatedAt: '',
-                              );
-                              _addNewAccounting(context, accounting);
-                              Navigator.pop(context);
-
-                              //},);
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Add Note'))
-                      ],
-                    )
-                  ],
+                            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          children: [
+                            CustomBtn(
+                              text: 'Cancel',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              isLoading: false,
+                            ),
+                            const Spacer(),
+                            CustomBtn(
+                              text: 'Create',
+                              onTap: () async {
+                                setState(() {
+                                    final Accounting accounting = Accounting(
+                                      id: '',
+                                      raiseId: raiseId,
+                                      description: _descriptionController.text,
+                                      entryType: _entryType,
+                                      amount: double.parse(_amountController.text),
+                                      createdAt: '',
+                                      updatedAt: '',
+                                    );
+                                    _addNewAccounting(context, accounting);
+                                    Navigator.pop(context);
+                                });
+                              },
+                              isLoading: Provider.of<Accountings>(context, listen: true).isLoading,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

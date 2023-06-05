@@ -56,7 +56,7 @@ class _EventsScreenState extends State<EventsScreen> {
                       ),
                     )
                   : Consumer<Events>(
-                      child: const Center(child: Text('No events added')),
+                      child: const Center(child: Text('No events added.')),
                       builder: (ctxx, events, child) {
                         if (events.items.isEmpty) {
                           return child as Widget;
@@ -99,7 +99,7 @@ class _EventsScreenState extends State<EventsScreen> {
             icon: Icons.edit,
             label: 'Edit',
           ),
-           SlidableAction(
+          SlidableAction(
             onPressed: (_) {
               Provider.of<Events>(context, listen: false).deleteEvent(context: context, event: event);
             },
@@ -168,25 +168,27 @@ class _EventsScreenState extends State<EventsScreen> {
                         ),
                         controller: titleController,
                       ),
-                      SizedBox(height: 10.0,),
-                       DateTimeFormField(
-                          decoration: InputDecoration(
-                            hintStyle: TextStyle(color: Colors.black45),
-                            errorStyle: TextStyle(color: Colors.redAccent),
-                            border: OutlineInputBorder(),
-                            suffixIcon: Icon(Icons.event_note),
-                            labelText: 'Event Date',
-                             errorText: validateEventDate ? 'Value Can\'t Be Empty' : null,
-                          ),
-                          mode: DateTimeFieldPickerMode.date,
-                          autovalidateMode: AutovalidateMode.always,
-                          validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-                          //selectedDate: selectedDate,
-                          onDateSelected: (DateTime value) {
-                            selectedDate = value;
-                            print(value.toIso8601String());
-                          },
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      DateTimeFormField(
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.black45),
+                          errorStyle: TextStyle(color: Colors.redAccent),
+                          border: OutlineInputBorder(),
+                          suffixIcon: Icon(Icons.event_note),
+                          labelText: 'Event Date',
+                          errorText: validateEventDate ? 'Value Can\'t Be Empty' : null,
                         ),
+                        mode: DateTimeFieldPickerMode.date,
+                        autovalidateMode: AutovalidateMode.always,
+                        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+                        //selectedDate: selectedDate,
+                        onDateSelected: (DateTime value) {
+                          selectedDate = value;
+                          print(value.toIso8601String());
+                        },
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0, bottom: 20),
                         child: Row(

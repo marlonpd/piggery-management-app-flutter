@@ -42,6 +42,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
     return Scaffold(
       backgroundColor: GlobalVariables.backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: GlobalVariables.backgroundColor,
         title: Text(
           'Raised Hog',

@@ -19,6 +19,12 @@ class Accountings with ChangeNotifier {
     return [..._items];
   }
 
+  bool _isLoading = false;
+
+  bool get isLoading {
+    return _isLoading;
+  }
+  
   Future<void> fetchAccountings(BuildContext context, String raiseId) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -65,6 +71,7 @@ class Accountings with ChangeNotifier {
       log(accounting.toJson());
       log('$uri/api/accounting/save');
       log('Bearer ${userProvider.user.token}');
+      _isLoading = true;
       http.Response res = await http.post(
         Uri.parse('$uri/api/accounting/save'),
         headers: {
@@ -84,6 +91,7 @@ class Accountings with ChangeNotifier {
         ),
       );
 
+      _isLoading = false;
       notifyListeners();
 
       if (context.mounted) {
@@ -98,7 +106,6 @@ class Accountings with ChangeNotifier {
     } catch (e) {
       showSnackBar(context, e.toString());
     }
-    notifyListeners();
   }
 
   Future<void> updateAccounting({

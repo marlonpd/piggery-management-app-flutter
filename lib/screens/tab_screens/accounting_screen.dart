@@ -53,7 +53,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
                       ),
                     )
                   : Consumer<Accountings>(
-                      child: const Center(child: Text('No expenses/income added')),
+                      child: const Center(child: Text('No expenses/income added.')),
                       builder: (ctxx, events, child) {
                         if (events.items.isEmpty) {
                           return child as Widget;
@@ -124,6 +124,9 @@ class _AccountingScreenState extends State<AccountingScreen> {
       // component is not dragged.
       child: GestureDetector(
           child: ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             title: Text(
               accounting.description,
             ),
