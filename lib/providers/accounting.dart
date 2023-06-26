@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:pma/helpers/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+//import 'package:pma/models/accounting_summary.dart';
 import 'package:pma/providers/user.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,12 @@ class Accountings with ChangeNotifier {
 
   bool get isLoading {
     return _isLoading;
+  }
+
+  Map<dynamic, dynamic> _accountingSummary = {};
+
+  get accountingSummary {
+    return _accountingSummary;  
   }
   
   Future<void> fetchAccountings(BuildContext context, String raiseId) async {
@@ -56,6 +63,38 @@ class Accountings with ChangeNotifier {
         );
       }
     } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchAccountingSummary(BuildContext context, String raiseId) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      log('$uri/api/accounting/summary?raise_id=$raiseId');
+      http.Response res = await http.get(
+        Uri.parse('$uri/api/accounting/summary?raise_id=$raiseId'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userProvider.user.token}',
+        },
+      );
+      
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            print('--xxxxxxxx');
+            _accountingSummary = jsonDecode(res.body);
+
+            print(_accountingSummary.toString());
+            
+          },
+        );
+      }
+    } catch (e) {
+      print(e.toString());
       showSnackBar(context, e.toString());
     }
     notifyListeners();

@@ -78,11 +78,16 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                 decoration: BoxDecoration(
                   color: GlobalVariables.backgroundColor,
                 ),
-                child: Text('About HogMaster'),
+                child: Column(
+                  children: [
+                    Text('About HogMaster'),
+                    Text('by: marlonpd'),
+                  ],
+                ),
               ),
               ListTile(
                 title: const Text('Change Password'),

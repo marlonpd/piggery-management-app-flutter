@@ -53,12 +53,18 @@ class _RaiseScreenState extends State<RaiseScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: GlobalVariables.backgroundColor,
+            DrawerHeader(
+                decoration: BoxDecoration(
+                  color: GlobalVariables.backgroundColor,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('About HogMaster'),
+                    Text('by: marlonpd'),
+                  ],
+                ),
               ),
-              child: Text('About HogMaster'),
-            ),
             ListTile(
               title: const Text('Change Password'),
               onTap: () {
