@@ -38,6 +38,7 @@ class Accountings with ChangeNotifier {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       log('$uri/api/accounting?raise_id=$raiseId');
+      _isLoading = true;
       http.Response res = await http.get(
         Uri.parse('$uri/api/accounting?raise_id=$raiseId'),
         headers: {
@@ -61,12 +62,16 @@ class Accountings with ChangeNotifier {
                 ),
               );
             }
+            _isLoading = false;
           },
         );
       }
     } catch (e) {
+      _isLoading = false;
       showSnackBar(context, e.toString());
     }
+
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -89,14 +94,11 @@ class Accountings with ChangeNotifier {
           onSuccess: () {
             if (res.statusCode == 200) {
               final accountngSummaryJson = jsonDecode(res.body);
-              print('xxxxxxxxxxx');
-              print(accountngSummaryJson.toString());
               _accountingSummary = AccountingSummary(
                 expensesSum: double.parse(accountngSummaryJson['expenses_sum'].toString()),
                 salesSum: double.parse(accountngSummaryJson['sales_sum'].toString()),
                 netIncome: double.parse(accountngSummaryJson['net_income'].toString()),
               );
-              
             }
           },
         );

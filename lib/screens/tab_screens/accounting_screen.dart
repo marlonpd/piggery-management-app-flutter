@@ -33,7 +33,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
             style: Theme.of(context).textTheme.headlineSmall,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Expanded(
