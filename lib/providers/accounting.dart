@@ -121,6 +121,7 @@ class Accountings with ChangeNotifier {
       log('$uri/api/accounting/save');
       log('Bearer ${userProvider.user.token}');
       _isLoading = true;
+      log(accounting.toString());
       http.Response res = await http.post(
         Uri.parse('$uri/api/accounting/save'),
         headers: {
@@ -153,6 +154,8 @@ class Accountings with ChangeNotifier {
         );
       }
     } catch (e) {
+      print(e.toString());
+      _isLoading = false;
       showSnackBar(context, e.toString());
     }
   }
@@ -175,6 +178,8 @@ class Accountings with ChangeNotifier {
         notifyListeners();
       }
 
+      print(accounting.toString());
+
       http.Response res = await http.post(
         Uri.parse('$uri/api/accounting/update'),
         headers: {
@@ -188,7 +193,9 @@ class Accountings with ChangeNotifier {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () {},
+          onSuccess: () {
+            print(res.body.toString());
+          },
         );
       }
     } catch (e) {

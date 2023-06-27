@@ -16,7 +16,7 @@ class CreateAccountingForm extends StatefulWidget {
   State<CreateAccountingForm> createState() => _CreateAccountingFormState();
 }
 
-List<String> entryTypes = <String>['income', 'expenses'];
+List<String> entryTypes = <String>['sales', 'expenses'];
 
 class _CreateAccountingFormState extends State<CreateAccountingForm> {
   final _descriptionController = TextEditingController();

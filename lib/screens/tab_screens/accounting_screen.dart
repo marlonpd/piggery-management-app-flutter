@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pma/helpers/constants.dart';
+import 'package:pma/helpers/global_variables.dart';
 import 'package:pma/models/raise.dart';
 import 'package:pma/models/accounting.dart';
 import 'package:pma/providers/accounting.dart';
 import 'package:pma/widgets/create_accounting_form.dart';
+import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class AccountingScreen extends StatefulWidget {
@@ -89,16 +91,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
         // All actions are defined in the children parameter.
         children: [
           // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
-            onPressed: (_) {
-              Provider.of<Accountings>(context, listen: false)
-                  .deleteAccounting(context: context, accounting: accounting);
-            },
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          ),
+          
         ],
       ),
 
@@ -116,6 +109,16 @@ class _AccountingScreenState extends State<AccountingScreen> {
             foregroundColor: Colors.white,
             icon: Icons.edit,
             label: 'Edit',
+          ),
+          SlidableAction(
+            onPressed: (_) {
+              Provider.of<Accountings>(context, listen: false)
+                  .deleteAccounting(context: context, accounting: accounting);
+            },
+            backgroundColor: const Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
           ),
         ],
       ),
@@ -145,107 +148,137 @@ class _AccountingScreenState extends State<AccountingScreen> {
     );
   }
 
+  List<String> entryTypes = <String>['sales', 'expenses'];
+
+  String _entryType = '';
+
   void _startEditAccounting(BuildContext ctx, Accounting accounting) {
-    final descriptionController = TextEditingController();
-    descriptionController.text = accounting.description;
-    final amountController = TextEditingController();
-    amountController.text = accounting.amount.toString();
+
+    final _dropdownMenuOptions =
+      entryTypes.map((String item) => DropdownMenuItem<String>(value: item, child: Text(item))).toList();
+
+    final _descriptionController = TextEditingController();
+    _descriptionController.text = accounting.description;
+    final _amountController = TextEditingController();
+    _amountController.text = accounting.amount.toString();
+
+        bool validateDescription = false;
+    bool validateAmount = false;
+    _entryType = accounting.entryType;
+
 
     final dropdownMenuOptions =
         ENTRY_TYPE.map((String item) => DropdownMenuItem<String>(value: item, child: Text(item))).toList();
     String entryType = accounting.entryType;
 
     showModalBottomSheet(
+        backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
           return StatefulBuilder(builder: (context, setState) {
-            return GestureDetector(
-              onTap: () {},
+            return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, right: 20, left: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text('Add new entry.'),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Description'),
-                      controller: descriptionController,
-                    ),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text('Entry Type'),
-                          DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                            hint: Text(
-                              'Select Item',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).hintColor,
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Add New Expenses/Income', style: Theme.of(context).textTheme.headlineSmall),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          errorText: validateDescription ? 'Value Can\'t Be Empty' : null,
+                        ),
+                        controller: _descriptionController,
+                      ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text('Entry Type'),
+                            DropdownButtonHideUnderline(
+                                child: DropdownButton2(
+                              hint: Text(
+                                'Select Item',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).hintColor,
+                                ),
                               ),
+                              items: _dropdownMenuOptions,
+                              value: _entryType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _entryType = value as String;
+                                });
+                              },
+                              buttonStyleData: const ButtonStyleData(
+                                height: 40,
+                                width: 140,
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                            )),
+                          ]),
+                      TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Amount',
+                            errorText: validateAmount ? 'Value Can\'t Be Empty' : null,
+                          ),
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          children: [
+                            CustomBtn(
+                              text: 'Cancel',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              isLoading: false,
                             ),
-                            items: dropdownMenuOptions,
-                            value: entryType,
-                            onChanged: (value) {
-                              setState(() {
-                                entryType = value as String;
-                              });
-                            },
-                            buttonStyleData: const ButtonStyleData(
-                              height: 40,
-                              width: 140,
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                            ),
-                          )),
-                        ]),
-                    Expanded(
-                        child: TextField(
-                            decoration: const InputDecoration(labelText: 'Amount'),
-                            controller: amountController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly])),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel),
-                            label: const Text('Cancel')),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              setState(
-                                () {
-                                  accounting.description = descriptionController.text;
-                                  accounting.entryType = entryType;
-                                  accounting.amount = double.parse(amountController.text);
-                                  _updateAccounting(context, accounting);
+                            const Spacer(),
+                            CustomBtn(
+                              text: 'Update',
+                              onTap: () async {
+                                setState(() {
+                                  final Accounting newAccounting = Accounting(
+                                    id: accounting.id,
+                                    raiseId: accounting.raiseId,
+                                    description: _descriptionController.text,
+                                    entryType: _entryType,
+                                    amount: double.parse(_amountController.text),
+                                    createdAt: '',
+                                    updatedAt: '',
+                                  );
+                                  _updateAccounting(context, newAccounting);
                                   Navigator.pop(context);
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Update Event'))
-                      ],
-                    )
-                  ],
+                                });
+                              },
+                              isLoading: Provider.of<Accountings>(context, listen: true).isLoading,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );
           });
         });
   }
+  }
 
   Future<void> _updateAccounting(ctx, Accounting accounting) async {
-    Provider.of<Accountings>(ctx, listen: false).updateAccounting(context: context, accounting: accounting);
+    Provider.of<Accountings>(ctx, listen: false).updateAccounting(context: ctx, accounting: accounting);
   }
-}
+
