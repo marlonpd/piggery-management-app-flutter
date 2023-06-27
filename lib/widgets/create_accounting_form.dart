@@ -60,7 +60,6 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
     bool validateAmount = false;
     _descriptionController.text = '';
 
-
     showModalBottomSheet(
         backgroundColor: GlobalVariables.backgroundColor,
         context: ctx,
@@ -75,10 +74,7 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-
-                       Text('Add New Expenses/Income',
-                        style: Theme.of(context).textTheme.headlineSmall),
-                    
+                      Text('Add New Expenses/Income', style: Theme.of(context).textTheme.headlineSmall),
                       TextField(
                         decoration: InputDecoration(
                           labelText: 'Description',
@@ -87,44 +83,46 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
                         controller: _descriptionController,
                       ),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text('Entry Type'),
-                          DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                            hint: Text(
-                              'Select Item',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).hintColor,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text('Entry Type'),
+                            DropdownButtonHideUnderline(
+                                child: DropdownButton2(
+                              hint: Text(
+                                'Select Item',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).hintColor,
+                                ),
                               ),
-                            ),
-                            items: _dropdownMenuOptions,
-                            value: _entryType,
-                            onChanged: (value) {
-                              setState(() {
-                                _entryType = value as String;
-                              });
-                            },
-                            buttonStyleData: const ButtonStyleData(
-                              height: 40,
-                              width: 140,
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                            ),
-                          )),
-                        ])
-                      ,
+                              items: _dropdownMenuOptions,
+                              value: _entryType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _entryType = value as String;
+                                });
+                              },
+                              buttonStyleData: const ButtonStyleData(
+                                height: 40,
+                                width: 140,
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                            )),
+                          ]),
                       TextField(
-                            decoration: InputDecoration(labelText: 'Amount',  errorText: validateAmount ? 'Value Can\'t Be Empty' : null,),
-                            controller: _amountController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]),
+                          decoration: InputDecoration(
+                            labelText: 'Amount',
+                            errorText: validateAmount ? 'Value Can\'t Be Empty' : null,
+                          ),
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]),
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0, bottom: 20),
                         child: Row(
@@ -141,17 +139,17 @@ class _CreateAccountingFormState extends State<CreateAccountingForm> {
                               text: 'Create',
                               onTap: () async {
                                 setState(() {
-                                    final Accounting accounting = Accounting(
-                                      id: '',
-                                      raiseId: raiseId,
-                                      description: _descriptionController.text,
-                                      entryType: _entryType,
-                                      amount: double.parse(_amountController.text),
-                                      createdAt: '',
-                                      updatedAt: '',
-                                    );
-                                    _addNewAccounting(context, accounting);
-                                    Navigator.pop(context);
+                                  final Accounting accounting = Accounting(
+                                    id: '',
+                                    raiseId: raiseId,
+                                    description: _descriptionController.text,
+                                    entryType: _entryType,
+                                    amount: double.parse(_amountController.text),
+                                    createdAt: '',
+                                    updatedAt: '',
+                                  );
+                                  _addNewAccounting(context, accounting);
+                                  Navigator.pop(context);
                                 });
                               },
                               isLoading: Provider.of<Accountings>(context, listen: true).isLoading,

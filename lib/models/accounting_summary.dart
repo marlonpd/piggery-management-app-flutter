@@ -5,10 +5,11 @@ class AccountingSummary {
   double salesSum = 0;
   double netIncome = 0;
 
-  AccountingSummary(
-      {required this.expensesSum,
-      required this.salesSum,
-      required this.netIncome,});
+  AccountingSummary({
+    required this.expensesSum,
+    required this.salesSum,
+    required this.netIncome,
+  });
 
   Map<String, dynamic> toMap() {
     return {

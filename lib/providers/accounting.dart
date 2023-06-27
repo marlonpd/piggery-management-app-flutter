@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:pma/helpers/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pma/models/accounting_summary.dart';
 //import 'package:pma/models/accounting_summary.dart';
 import 'package:pma/providers/user.dart';
 import 'package:provider/provider.dart';
@@ -26,12 +28,12 @@ class Accountings with ChangeNotifier {
     return _isLoading;
   }
 
-  Map<dynamic, dynamic> _accountingSummary = {};
+  AccountingSummary? _accountingSummary;
 
-  get accountingSummary {
-    return _accountingSummary;  
+  AccountingSummary? get accountingSummary {
+    return _accountingSummary;
   }
-  
+
   Future<void> fetchAccountings(BuildContext context, String raiseId) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -79,17 +81,23 @@ class Accountings with ChangeNotifier {
           'Authorization': 'Bearer ${userProvider.user.token}',
         },
       );
-      
+
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
-            print('--xxxxxxxx');
-            _accountingSummary = jsonDecode(res.body);
-
-            print(_accountingSummary.toString());
-            
+            if (res.statusCode == 200) {
+              final accountngSummaryJson = jsonDecode(res.body);
+              print('xxxxxxxxxxx');
+              print(accountngSummaryJson.toString());
+              _accountingSummary = AccountingSummary(
+                expensesSum: double.parse(accountngSummaryJson['expenses_sum'].toString()),
+                salesSum: double.parse(accountngSummaryJson['sales_sum'].toString()),
+                netIncome: double.parse(accountngSummaryJson['net_income'].toString()),
+              );
+              
+            }
           },
         );
       }
