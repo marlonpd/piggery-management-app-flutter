@@ -8,11 +8,35 @@ import 'package:pma/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/signup_screen.dart';
+import 'package:pma/screens/tab_screens/accounting_screen.dart';
+import 'package:pma/screens/tab_screens/detail_screen.dart';
+import 'package:pma/screens/tab_screens/events_screen.dart';
+import 'package:pma/screens/tab_screens/notes_scrent.dart';
 import 'package:pma/screens/update_password_screen.dart';
 import 'package:pma/screens/dashboard_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
+    case NotesScreen.routeName: 
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder:  (_) => NotesScreen()
+      );
+    case EventsScreen.routeName: 
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_)=> EventsScreen()
+      );
+    case AccountingScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => AccountingScreen()
+      );
+    case DetailScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const DetailScreen()
+      );
     case UpdatePasswordScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,

@@ -110,10 +110,10 @@ class _HogDetailScreenState extends State<HogDetailScreen> with TickerProviderSt
         body: TabBarView(
           controller: _controller,
           children: [
-            DetailScreen(raise: raise),
-            NotesScreen(raise: raise),
-            EventsScreen(raise: raise),
-            AccountingScreen(raise: raise),
+            // DetailScreen(raise: raise),
+            // NotesScreen(raise: raise),
+            // EventsScreen(raise: raise),
+            // AccountingScreen(raise: raise),
           ],
         ),
       ),

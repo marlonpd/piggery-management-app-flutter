@@ -14,10 +14,8 @@ import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class AccountingScreen extends StatefulWidget {
-  final Raise raise;
-
   static const String routeName = '/accounting';
-  const AccountingScreen({super.key, required this.raise});
+  const AccountingScreen({super.key});
 
   @override
   State<AccountingScreen> createState() => _AccountingScreenState();
@@ -26,7 +24,9 @@ class AccountingScreen extends StatefulWidget {
 class _AccountingScreenState extends State<AccountingScreen> {
   @override
   Widget build(BuildContext context) {
-    String raiseId = widget.raise.id;
+
+    Raise raise = ModalRoute.of(context)?.settings.arguments as Raise;
+    String raiseId = raise.id;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

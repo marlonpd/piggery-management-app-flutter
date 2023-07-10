@@ -75,7 +75,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: new InkWell(
           
             onTap: () {
-              Navigator.of(context).pushNamed(routeName);
+              Navigator.of(context).pushNamed(routeName,
+               arguments: raise,
+              );
+
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

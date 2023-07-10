@@ -17,8 +17,7 @@ import 'package:provider/provider.dart';
 class EventsScreen extends StatefulWidget {
 
   static const String routeName = '/events';
-  final Raise raise;
-  const EventsScreen({super.key, required this.raise});
+  const EventsScreen({super.key});
 
   @override
   State<EventsScreen> createState() => _EventsScreenState();
@@ -27,8 +26,8 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
-    String raiseId = widget.raise.id;
-
+    Raise raise = ModalRoute.of(context)?.settings.arguments as Raise;
+    var raiseId = raise.id;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

@@ -16,9 +16,8 @@ import '../../models/raise.dart';
 import '../../widgets/create_note_form.dart';
 
 class NotesScreen extends StatefulWidget {
-  final Raise raise;
   static const String routeName = '/notes';
-  const NotesScreen({super.key, required this.raise});
+  const NotesScreen({super.key});
 
   @override
   State<NotesScreen> createState() => _NotesScreenState();
@@ -27,7 +26,9 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen> {
   @override
   Widget build(BuildContext context) {
-    String raiseId = widget.raise.id;
+
+    Raise raise = ModalRoute.of(context)?.settings.arguments as Raise;
+    String raiseId = raise.id;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
