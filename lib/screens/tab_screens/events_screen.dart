@@ -15,6 +15,8 @@ import 'package:pma/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class EventsScreen extends StatefulWidget {
+
+  static const String routeName = '/events';
   final Raise raise;
   const EventsScreen({super.key, required this.raise});
 

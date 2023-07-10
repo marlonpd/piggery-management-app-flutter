@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pma/providers/raise.dart';
 import 'package:pma/providers/user.dart';
+import 'package:pma/screens/dashboard_screen.dart';
 import 'package:pma/screens/hog_detail_screen.dart';
 import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/update_password_screen.dart';
@@ -171,7 +172,7 @@ class _RaiseScreenState extends State<RaiseScreen> {
           onTap: () {
             Navigator.of(context)
                 .pushNamed(
-              HogDetailScreen.routeName,
+              DashboardScreen.routeName,
               arguments: raise,
             )
                 .then((_) {

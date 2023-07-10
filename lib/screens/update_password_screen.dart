@@ -53,6 +53,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
     return Scaffold(
       backgroundColor: GlobalVariables.backgroundColor,
       appBar: AppBar(
+        backgroundColor: GlobalVariables.backgroundColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             iconSize: 20.0,

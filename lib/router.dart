@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:pma/screens/signin_screen.dart';
 import 'package:pma/screens/signup_screen.dart';
 import 'package:pma/screens/update_password_screen.dart';
+import 'package:pma/screens/dashboard_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -56,6 +57,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => const HogDetailScreen(),
+      );
+    case DashboardScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const DashboardScreen(),
       );
     default:
       return MaterialPageRoute(

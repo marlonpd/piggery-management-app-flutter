@@ -17,6 +17,7 @@ import '../../widgets/create_note_form.dart';
 
 class NotesScreen extends StatefulWidget {
   final Raise raise;
+  static const String routeName = '/notes';
   const NotesScreen({super.key, required this.raise});
 
   @override

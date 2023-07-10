@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../models/raise.dart';
 
 class DetailScreen extends StatefulWidget {
+
+  static const String routeName = '/detail';
   final Raise raise;
 
   const DetailScreen({super.key, required this.raise});
